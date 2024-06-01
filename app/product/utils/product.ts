@@ -1,5 +1,5 @@
 import { json } from "stream/consumers";
-import { Product } from "../models";
+import { Product } from "./models";
 
 const api = "https://jsonplaceholder.typicode.com/";
 
