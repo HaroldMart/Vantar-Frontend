@@ -1,14 +1,21 @@
-import {createProduct, getProduct} from "../../utils/api/product"
+import {createProduct, deleteProduct, getAllProducts, getProduct, updateProduct} from "../../utils/api/product"
 import { Product } from "@/app/utils/models"
 
 
 export default async function Page() {
     const integrantes = ["Haroldy", "Cristian", "Isael"]
-    const product: Product = {id : 4, name: "kelvin", price: 30}
+    
     const miProductoAPedir = 1;
+    const productoACrear: Product = {name: "kelvin", price: 30};
+    const productoActualizar: Product = {name: "kritiam", price: 493};
+    const miProductoAEliminar = 76;
     // If you want to test the functions, here are the calls
+    // await getAllProducts();
     // await getProduct(1);
-    // await createProduct(product);
+    // await createProduct(productoACrear);
+    // await updateProduct(15, productoActualizar);
+    // await deleteProduct(miProductoAEliminar);
+    
 
     return (
         <main>
