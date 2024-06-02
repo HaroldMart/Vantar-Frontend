@@ -1,4 +1,4 @@
-import {createProduct, deleteProduct, getAllProducts, getProduct, updateProduct} from "../utils/product"
+import {createProduct, deleteProduct, getAllProducts, getProduct, updateProduct} from "../utils/api"
 import { Product } from "../utils/models"
 
 export default function Page() {
