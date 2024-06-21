@@ -1,9 +1,8 @@
-import { json } from "stream/consumers";
+import { IProductRepository } from "../core/interfaces";
 import { Product } from "../core/type";
-import { promises } from "dns";
-import { API } from "./api";
+import { API } from "../../shared/api";
 
-export class ProductRepository {
+export class ProductRepository implements IProductRepository {
   constructor() {}
 
   async getAllProducts(): Promise<Product[]> {
@@ -77,7 +76,7 @@ export class ProductRepository {
   }
 
   // updating a product
-  async updateProduct(id: string, product: Product): Promise<Product> {
+  async updateProduct(id: string, product: Product): Promise<boolean> {
     const method = "PUT";
     const url = API + `products/${id}`;
 
@@ -93,13 +92,11 @@ export class ProductRepository {
 
       if (!response.ok) throw new Error(`ERROR: status ${response.status}`);
 
-      const data: Product = await response.json();
-
-      return data;
+      return true;
     } catch (err) {
       console.log(`There was an error during the ${method} request`);
       console.log(err);
-      const defaultResponse: Product = { id: "", name: "default", price: 0 };
+      const defaultResponse = false;
       return defaultResponse;
     }
   }
