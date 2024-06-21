@@ -1,107 +1,131 @@
 import { json } from "stream/consumers";
 import { Product } from "../core/type";
+import { promises } from "dns";
+import { API } from "./api";
 
-const api = "http://localhost:8000/"
-// pnpm json-server --watch app\"(features)"\product\"(infrastructure)"\data.json --port 8000
+export class ProductRepository {
+  constructor() {}
 
-// getting all products
-export async function getAllProducts() {
-    const method = "GET"
+  async getAllProducts(): Promise<Product[]> {
+    const method = "GET";
+    const url = API + "products";
+
     try {
-        const url = api + "products";
-        const response = await fetch(url);
-        const data = await response.json();
-        console.log(`A GET request was made to the endpoint: ${url}`)
-        // console.log(data);
+      // console.log(`A GET request was made to the endpoint: ${url}`)
+      const response = await fetch(url);
 
-        return data;
+      if (!response.ok) throw new Error(`ERROR: status ${response.status}`);
 
-    } catch(err) {
-        console.log(`There was an error during the ${method} request`)
-        console.log(err);
+      const data: Product[] = await response.json();
+
+      return data;
+    } catch (err) {
+      console.log(`There was an error during the ${method} request`);
+      console.log(err);
+      return [];
     }
+  }
+
+  // getting a product
+  async getProduct(id: string): Promise<Product> {
+    const method = "GET";
+    const url = API + `products/${id}`;
+
+    try {
+      // console.log(`A GET request was made to the endpoint: ${url}`)
+      const response = await fetch(url);
+
+      if (!response.ok) throw new Error(`ERROR: status ${response.status}`);
+
+      const data: Product = await response.json();
+
+      return data;
+    } catch (err) {
+      console.log(`There was an error during the ${method} request`);
+      console.log(err);
+      const defaultResponse: Product = { id: "", name: "default", price: 0 };
+      return defaultResponse;
+    }
+  }
+
+  // creating a product
+  async createProduct(product: Product): Promise<Product> {
+    const method = "POST";
+    const url = API + "products";
+
+    try {
+      // console.log(`A ${method} request was made to the endpoint: ${url}`)
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(product), // here I'm converting the product type into json for the request
+      });
+
+      if (!response.ok) throw new Error(`ERROR: status ${response.status}`);
+
+      const data: Product = await response.json();
+
+      return data;
+    } catch (err) {
+      console.log(`There was an error during the ${method} request`);
+      console.log(err);
+      const defaultResponse: Product = { id: "", name: "default", price: 0 };
+      return defaultResponse;
+    }
+  }
+
+  // updating a product
+  async updateProduct(id: string, product: Product): Promise<Product> {
+    const method = "PUT";
+    const url = API + `products/${id}`;
+
+    try {
+      // console.log(`A ${method} request was made to the endpoint: ${url}`)
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(product), // here I'm converting the product type into json for the request
+      });
+
+      if (!response.ok) throw new Error(`ERROR: status ${response.status}`);
+
+      const data: Product = await response.json();
+
+      return data;
+    } catch (err) {
+      console.log(`There was an error during the ${method} request`);
+      console.log(err);
+      const defaultResponse: Product = { id: "", name: "default", price: 0 };
+      return defaultResponse;
+    }
+  }
+
+  // deleting a product
+  async deleteProduct(id: string): Promise<boolean> {
+    const method = "DELETE";
+    const url = API + `products/${id}`;
+
+    try {
+      // console.log(`A ${method} request was made to the endpoint: ${url}`)
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+
+      if (!response.ok) throw new Error(`ERROR: status ${response.status}`);
+
+      return true;
+    } catch (err) {
+      console.log(`There was an error during the ${method} request`);
+      console.log(err);
+      const defaultResponse = false;
+      return defaultResponse;
+    }
+  }
 }
-
-// // getting a product
-// export async function getProduct(id : number) {
-//     const method = "GET"
-//     try {
-//         const url = api + `posts/${id}`;
-//         const response = await fetch(url);
-//         const data = await response.json();
-//         console.log(`A GET request was made to the endpoint: ${url}`)
-//         console.log(data)
-
-//     } catch(err) {
-//         console.log(`There was an error during the ${method} request`)
-//         console.log(err)
-//     }
-// }
-
-// // creating a product
-// export async function createProduct(product : Product) {
-//     const method = "POST"
-//     try {
-//         const url = api + "posts";
-//         const response = await fetch(url, {
-//             method: method,
-//             headers: {
-//                 "Content-type":  "application/json"
-//             },
-//             body: JSON.stringify(product), // here I'm converting the product type into json for the request
-//         });
-
-//         const data = await response.json();
-//         console.log(`A ${method} request was made to the endpoint: ${url}`)
-//         console.log(data)
-
-//     } catch(err) {
-//         console.log(`There was an error during the ${method} request`)
-//         console.log(err)
-//     }
-// }
-
-// // updating a product
-// export async function updateProduct(id : number, product : Product) {
-//     const method = "PUT"
-//     try {
-//         const url = api + `posts/${id}`;
-//         const response = await fetch(url, {
-//             method: method,
-//             headers: {
-//                 "Content-type":  "application/json"
-//             },
-//             body: JSON.stringify(product), // here I'm converting the product type into json for the request
-//         });
-
-//         const data = await response.json();
-//         console.log(`A ${method} request was made to the endpoint: ${url}`)
-//         console.log(data)
-
-//     } catch(err) {
-//         console.log(`There was an error during the ${method} request`)
-//         console.log(err)
-//     }
-// }
-
-// // deleting a product
-// export async function deleteProduct(id : number) {
-//     const method = "DELETE"
-//     try {
-//         const url = api + `posts/${id}`;
-//         const response = await fetch(url, {
-//             method: method,
-//             headers: {
-//                 "Content-type":  "application/json"
-//             }
-//         });
-
-//         const data = await response.json();
-//         console.log(`A ${method} request was made to the endpoint: ${url}`)
-//         console.log(data)
-
-//     } catch(err) {
-//         console.log(`There was an error during the ${method} request`)
-//         console.log(err)
-//     }
-// }
