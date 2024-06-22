@@ -2,7 +2,7 @@ import { ProductRepository } from "../repository";
 import { Product } from "../../core/type";
 
 export default async function Page() {
-  const miProductoAPedir = "0771";
+  const miProductoAPedir = "d6a1";
   const productoACrear: Product = { name: "kelvin", price: 30 };
   const productoActualizar: Product = { name: "izaelle", price: 493 };
   const miProductoAEliminar = "367f";
@@ -10,14 +10,14 @@ export default async function Page() {
   // If you want to test the functions, here are the calls
   const repository = new ProductRepository();
 
-  // const getProducts = await repository.getAllProducts();
-  // console.log(products[1])
+  const getProducts = await repository.getAllProducts();
+  console.log(getProducts);
 
   // const getProduct = await repository.getProduct(miProductoAPedir);
-  // console.log(product)
+  // console.log(getProduct)
 
   // const createProduct = await repository.createProduct(productoACrear);
-  // console.log(product)
+  // console.log(createProduct)
 
   // const updateProduct = await repository.updateProduct("367f", productoActualizar);
   // console.log(updateProduct)
@@ -25,5 +25,13 @@ export default async function Page() {
   // const deleteProduct = await repository.deleteProduct(miProductoAEliminar);
   // console.log(deleteProduct)
 
-  return <h1>PRODUCTS</h1>;
+  return (
+    <div>
+      <h1>PRODUCTS</h1>
+      <p>Lista de productos</p>
+      {getProducts.map((item) => (
+        <p key={item.id}>{item.name}</p>
+      ))}
+    </div>
+  );
 }

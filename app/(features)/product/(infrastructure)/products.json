@@ -1,3 +1,14 @@
 {
-  "products": []
+  "products": [
+    {
+      "id": "257e",
+      "name": "kelvin",
+      "price": 30
+    },
+    {
+      "id": "d6a1",
+      "name": "kelvin",
+      "price": 30
+    }
+  ]
 }
