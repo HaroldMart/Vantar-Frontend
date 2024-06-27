@@ -1,14 +1,9 @@
 {
   "products": [
     {
-      "id": "257e",
+      "id": "8eab",
       "name": "kelvin",
-      "price": 30
-    },
-    {
-      "id": "d6a1",
-      "name": "kelvin",
-      "price": 30
+      "price": 40
     }
   ]
 }

@@ -1,22 +1,24 @@
-import { ProductRepository } from "../repository";
+import { GenericService } from "@/app/(features)/shared/service";
+import { ProductService } from "../../application/service";
 import { Product } from "../../core/type";
 
 export default async function Page() {
   const miProductoAPedir = "d6a1";
-  const productoACrear: Product = { name: "kelvin", price: 30 };
+  const productoACrear: Product = { name: "kelvin", price: 40 };
   const productoActualizar: Product = { name: "izaelle", price: 493 };
   const miProductoAEliminar = "367f";
 
   // If you want to test the functions, here are the calls
-  const repository = new ProductRepository();
+  const serv = new GenericService<Product>();
+  const service = new ProductService(serv);
 
-  const getProducts = await repository.getAllProducts();
+  const getProducts = await service.getAll();
   console.log(getProducts);
 
-  // const getProduct = await repository.getProduct(miProductoAPedir);
+  // const getProduct = await service.get(miProductoAPedir);
   // console.log(getProduct)
 
-  // const createProduct = await repository.createProduct(productoACrear);
+  // const createProduct = await service.create(productoACrear);
   // console.log(createProduct)
 
   // const updateProduct = await repository.updateProduct("367f", productoActualizar);
@@ -28,10 +30,11 @@ export default async function Page() {
   return (
     <div>
       <h1>PRODUCTS</h1>
+      {/* <h1>PRODUCTS</h1>
       <p>Lista de productos</p>
       {getProducts.map((item) => (
         <p key={item.id}>{item.name}</p>
-      ))}
+      ))} */}
     </div>
   );
 }
