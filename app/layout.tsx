@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 };
 
 const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-})
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export default function RootLayout({
   children,
@@ -26,11 +26,11 @@ export default function RootLayout({
       <body className={inter.variable}>
         <div role="main" className="main">
           <Sidebar />
-		      {children}
+          {children}
         </div>
 
         <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-		</body>
+      </body>
     </html>
   );
 }
