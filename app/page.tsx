@@ -1,6 +1,6 @@
 import { BiDislike } from "react-icons/bi";
 import Link from "next/link";
-import Button from "@/app/components/Button";
+import Button from "@/app/components/UI/button";
 import { FiArrowLeft, FiArrowRight, FiArrowUp } from 'react-icons/fi'; // Importando algunos iconos como ejemplo
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 
