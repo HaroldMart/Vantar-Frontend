@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import '@/app/components/styles/components/_button.scss';
 
 const Button = ({ size, hierarchy, state, fullWidth, children }) => {
   // Define las clases base para el botón
-  let buttonClasses = "flex items-center justify-center rounded-md focus:outline-none gap-2";
+  let buttonClasses = "button-base focus:outline-none";
   if (fullWidth) {
     buttonClasses += ' w-full';
   }
