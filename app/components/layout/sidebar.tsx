@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import "@/app/components/sidebar.scss";
+import "@/app/components/styles/components/_sidebar.scss";
 import Image from 'next/image';
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
