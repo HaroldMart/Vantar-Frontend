@@ -1,7 +1,6 @@
 import "@/app/global.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Sidebar from "@/app/components/layout/sidebar";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -24,12 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <div role="main" className="main">
-          <Sidebar />
-          {children}
-        </div>
-
-        <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+        <div role="main" className="main">{children}</div>
       </body>
     </html>
   );
