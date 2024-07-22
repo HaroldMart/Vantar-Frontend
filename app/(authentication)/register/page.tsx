@@ -1,15 +1,14 @@
-import {AuthLayout} from "@/app/(authentication)/auth_layout"
+import Link from "next/link";
+import "@/app/components/styles/main.scss";
 
 function Page() {
 
     return (
-        <h1>Register page</h1>
+        <div>
+            <h1>Register page</h1>
+            <p>Back to  <Link href="/login" className="link">Sign In</Link></p>
+        </div>
     )
 }
 
-
-Page.getLayout = function getLayout(page: any) {
-    return <AuthLayout>{page}</AuthLayout>;
-  };
-  
-  export default Page;
+export default Page;

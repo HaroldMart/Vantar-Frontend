@@ -5,6 +5,7 @@ import '@/app/components/styles/components/_button.scss';
 const Button = ({ size, hierarchy, state, fullWidth, children }) => {
   // Define las clases base para el botón
   let buttonClasses = "button-base focus:outline-none";
+
   if (fullWidth) {
     buttonClasses += ' w-full';
   }
@@ -12,19 +13,19 @@ const Button = ({ size, hierarchy, state, fullWidth, children }) => {
   // Configurar tamaños
   switch (size) {
     case 'sm':
-      buttonClasses += ' px-5 py-2'; // padding: 8px 12px (Tailwind: px-3 py-2)
+      buttonClasses += ' px-3 py-2'; // padding: 8px 12px (Tailwind: px-3 py-2)
       break;
     case 'md':
-      buttonClasses += ' px-5 py-3'; // padding: 10px 14px (Tailwind: px-3.5 py-2.5)
+      buttonClasses += ' px-3.5 py-2.5'; // padding: 10px 14px (Tailwind: px-3.5 py-2.5)
       break;
     case 'lg':
-      buttonClasses += ' px-6 py-4'; // padding: 10px 16px (Tailwind: px-4 py-2.5)
+      buttonClasses += ' px-4 py-2.5'; // padding: 10px 16px (Tailwind: px-4 py-2.5)
       break;
     case 'xl':
-      buttonClasses += ' px-7 py-5'; // padding: 12px 18px (Tailwind: px-4.5 py-3)
+      buttonClasses += ' px-4.5 py-3'; // padding: 12px 18px (Tailwind: px-4.5 py-3)
       break;
     case '2xl':
-      buttonClasses += ' px-8 py-6'; // padding: 16px 22px (Tailwind: px-5.5 py-4)
+      buttonClasses += ' px-5.5 py-4'; // padding: 16px 22px (Tailwind: px-5.5 py-4)
       break;
     default:
       buttonClasses += ' px-3 py-2.5'; // padding por defecto (10px 14px)
@@ -79,7 +80,7 @@ Button.propTypes = {
 Button.defaultProps = {
   size: 'md',
   hierarchy: 'Primary',
-  state: 'Default',
+  state: 'Disable',
   fullWidth: false
 };
 

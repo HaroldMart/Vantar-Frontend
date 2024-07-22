@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '@/app/components/styles/components/_input.scss';
 
-const Input = ({ state, fullWidth, placeholder, label }) => {
+const Input = ({ state, fullWidth, placeholder, label, type }) => {
   // Define las clases base para el input
   let inputClasses = "input-base"; // Clase base general
   let containerClasses = "input-container";
@@ -27,10 +27,10 @@ const Input = ({ state, fullWidth, placeholder, label }) => {
   }
 
   return (
-    <div className={containerClasses} >
+    <div className={containerClasses}>
       {label && <label className="input-label">{label}</label>}
       <input 
-        type="text" 
+        type={type} 
         className={inputClasses} 
         placeholder={placeholder} 
         disabled={state === 'Disabled'} 
@@ -45,6 +45,7 @@ Input.propTypes = {
   fullWidth: PropTypes.bool,
   placeholder: PropTypes.string,
   label: PropTypes.string,
+  type: PropTypes.oneOf(['text', 'password', 'email', 'number']), // Agrega aquí otros tipos de input según sea necesario
 };
 
 // Define los valores por defecto para las props
@@ -53,6 +54,7 @@ Input.defaultProps = {
   fullWidth: false,
   placeholder: '',
   label: '',
+  type: 'text', // Valor por defecto para el tipo de input
 };
 
 export default Input;
