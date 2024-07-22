@@ -1,15 +1,19 @@
-import {AuthLayout} from "@/app/(authentication)/auth_layout"
+// import {AuthLayout} from "@/app/(authentication)/auth_layout"
 
-function Page() {
+// function Page() {
 
-    return (
-        <h1>Register page</h1>
-    )
-}
+//     return (
+//         <h1>Register page</h1>
+//     )
+// }
 
 
-Page.getLayout = function getLayout(page: any) {
-    return <AuthLayout>{page}</AuthLayout>;
-  };
+// Page.getLayout = function getLayout(page: any) {
+//     return <AuthLayout>{page}</AuthLayout>;
+//   };
   
-  export default Page;
+//   export default Page;
+
+export default function Page() {
+    return <div>mifieq</div>
+}

@@ -1,5 +1,3 @@
-import Button from "@/app/components/UI/button";
-import Input from "@/app/components/UI/input";
 
 export default function Page() {
   return (
