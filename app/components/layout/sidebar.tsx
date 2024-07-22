@@ -194,7 +194,7 @@ export default function Sidebar() {
                         </div>
                         <div className="actions">
                             <button className="button" onClick={handleCloseFeaturedCard}>Dismiss</button>
-                            <a href="#" className="button link">What's new?</a>
+                            <a href="#" className="button link">What&apos;s new?</a>
                         </div>
                     </div>
                 )}
