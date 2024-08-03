@@ -1,12 +1,12 @@
 import { GenericService } from "@/app/(features)/shared/service";
-import { ProductService } from "../../application/service";
-import { Product } from "../../core/type";
+import { InventoryService } from "../utils/service";
+import { Inventory } from "../core/type";
 
 export default function Page() {
-  const miProductoAPedir = "d6a1";
-  const productoACrear: Product = { name: "kelvin", price: 40 };
-  const productoActualizar: Product = { name: "izaelle", price: 493 };
-  const miProductoAEliminar = "367f";
+  // const miProductoAPedir = "d6a1";
+  // const productoACrear: Product = { name: "kelvin", price: 40 };
+  // const productoActualizar: Product = { name: "izaelle", price: 493 };
+  // const miProductoAEliminar = "367f";
 
   // If you want to test the functions, here are the calls
   // const serv = new GenericService<Product>();
