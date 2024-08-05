@@ -1,6 +1,6 @@
-import { API } from "../shared/api";
-import { IGenericService } from "../shared/interfaces";
-import { Inventory } from "./type";
+import { API } from "../../shared/api";
+import { IGenericService } from "../../shared/interfaces";
+import { Inventory } from "../core/type";
 
 export class InventoryService {
   private _service: IGenericService<Inventory>;
