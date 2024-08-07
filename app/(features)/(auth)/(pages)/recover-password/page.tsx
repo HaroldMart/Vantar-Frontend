@@ -1,7 +1,3 @@
-
 export default function Page() {
-
-    return (
-        <h1>Password recovery page</h1>
-    )
+  return <h1>Password recovery page</h1>;
 }

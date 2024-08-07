@@ -29,7 +29,12 @@ export default function Page() {
 
   return (
     <div>
-      <h1>PRODUCTS</h1>
+      <h1>Esta es la pagina de inventarios</h1>
+      <li>Inventario xd</li>
+      <li>Inventario xd</li>
+      <li>Inventario xd</li>
+      <li>Inventario xd</li>
+      <li>Inventario xd</li>
       {/* <h1>PRODUCTS</h1>
       <p>Lista de productos</p>
       {getProducts.map((item) => (
