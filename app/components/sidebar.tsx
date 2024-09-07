@@ -97,7 +97,7 @@ export default function Sidebar() {
 						<p className="text-lg font-semibold">Vantar System</p>
 					</div>
 				</div>
-				<div className="px-4 py-2">
+				<div className="px-4 py-2 hidden">
 					<div className="relative flex items-center w-full h-11 rounded-lg shadow focus-within:shadow-lg bg-white overflow-hidden border border-gray-300">
 						<div className="grid place-items-center h-full w-12 text-gray-300">
 							<svg
