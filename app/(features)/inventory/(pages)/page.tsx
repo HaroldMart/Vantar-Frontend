@@ -32,7 +32,6 @@ export default function InventoryPage() {
     { name: "GoPro Hero 9", color: "Black", category: "Camera", accessories: "Yes", available: "Yes", price: "$399", weight: "0.28 lb." }
   ];
 
-
   // const tableBody = document.querySelector("tbody");
 
   // Función para filtrar por búsqueda

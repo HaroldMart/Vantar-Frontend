@@ -1,5 +1,5 @@
 import "@/app/global.css";
-import Link from 'next/link'
+import Link from "next/link";
 import { BiArrowBack } from "react-icons/bi";
 
 export default function NotFound() {
@@ -7,12 +7,15 @@ export default function NotFound() {
     <section className="flex flex-col h-screen justify-center items-center px-6 py-12 bg-gray-100">
       <div className="flex flex-col items-center gap-8 max-w-4xl w-full">
         <div className="flex flex-col items-center gap-6 text-center">
-          <h6 className="text-[#6941C6] font-inter text-xl font-semibold">Error 404</h6>
+          <h6 className="text-[#6941C6] font-inter text-xl font-semibold">
+            Error 404
+          </h6>
           <h1 className="text-[#101828] font-inter text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight">
             Página no encontrada
           </h1>
           <p className="text-[#475467] font-inter text-base md:text-lg lg:text-xl">
-            Lo sentimos, la página que está buscando no existe. Aquí tiene algunos enlaces de ayuda:
+            Lo sentimos, la página que está buscando no existe. Aquí tiene
+            algunos enlaces de ayuda:
           </p>
         </div>
         <div className="flex flex-col md:flex-row gap-4">
