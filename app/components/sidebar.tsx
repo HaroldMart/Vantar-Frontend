@@ -26,36 +26,36 @@ import React, { useState } from "react";
 const links = [
 	{
 		icon: <BiHomeAlt size={22} />,
-		name: "Home",
+		name: "Inicio",
 		href: "/",
 	},
 	{
 		icon: <LuUsers size={22} />,
-		name: "Customers",
+		name: "Clientes",
 		href: "/customers",
 	},
 	{
 		icon: <BiTask size={22} />,
-		name: "Inventories",
+		name: "Inventarios",
 		href: "/inventory",
 	},
 	{
 		icon: <BiPieChartAlt2 size={22} />,
-		name: "Reporting",
+		name: "Reportes",
 		href: "/reporting",
 		subsections: [
-			{ name: "Project A", href: "/projects/a" },
-			{ name: "Project B", href: "/projects/b" },
+			{ name: "Junio 21-24", href: "/report/34243132" },
+			{ name: "Julio 13-24", href: "/report/43545656" },
 		],
 	},
 	{
 		icon: <BiBarChartSquare size={22} />,
-		name: "Dashboard",
+		name: "Tablero",
 		href: "/dashboard",
 	},
 	{
 		icon: <BiLayer size={22} />,
-		name: "Projects",
+		name: "Proyectos",
 		href: "/projects",
 	},
 ];
@@ -63,12 +63,12 @@ const links = [
 const footer_links = [
 	{
 		icon: <BiBuoy size={22} />,
-		name: "Support",
+		name: "Soporte",
 		href: "/support",
 	},
 	{
 		icon: <BiCog size={22} />,
-		name: "Settings",
+		name: "Configuración",
 		href: "/settings",
 	},
 ];
@@ -291,33 +291,6 @@ export default function Sidebar() {
 					})}
 				</div>
 
-				<div className="px-4 mt-6">
-					<Link
-						href="#"
-						className="flex items-center px-4 py-3 rounded-lg cursor-pointer text-gray-700 hover:bg-gray-200"
-						onClick={toggleBusinessDropdown}
-					>
-						<p className="flex-grow">Menú principal</p>
-						<BiChevronDown size={22} className={clsx("transition-transform", { "rotate-180": isBusinessDropdownOpen })} />
-					</Link>
-					{isBusinessDropdownOpen && (
-						<div className="ml-4 mt-2">
-							<p className="font-semibold text-gray-700 mb-2">Nombre del negocio</p>
-							{businesses.map((business) => (
-								<Link
-									href={business.href}
-									key={business.name}
-									className={clsx("block py-2 px-4 rounded-lg", {
-										"text-blue-500": pathname === business.href,
-										"text-gray-700 hover:bg-gray-200": pathname !== business.href,
-									})}
-								>
-									{business.name}
-								</Link>
-							))}
-						</div>
-					)}
-				</div>
 			</div>
 
 			<div className="border-t p-4">
@@ -327,7 +300,7 @@ export default function Sidebar() {
 							<Link
 								href={link.href}
 								key={link.name}
-								className={clsx("flex items-center p-2 rounded-lg", {
+								className={clsx("flex items-center px-4 py-3 rounded-lg", {
 									"text-white bg-blue-500": pathname === link.href,
 									"text-gray-700 hover:bg-gray-200": pathname !== link.href,
 								})}
@@ -343,7 +316,7 @@ export default function Sidebar() {
 				<div className="flex items-center justify-between">
 					<div className="flex items-center space-x-2">
 						<div className="h-10 w-10 bg-gray-300 rounded-full overflow-hidden">
-							<img src="https://pkimgcdn.peekyou.com/08545e176593c5fa40c9baa7d7fbe118.jpeg" alt="default profile" />
+							<Image src={"https://pkimgcdn.peekyou.com/08545e176593c5fa40c9baa7d7fbe118.jpeg"} alt={"Profile imagen"} width={40} height={40}/>
 						</div>
 						<div>
 							<h5 className="font-semibold self-stretch">Isael Diroche</h5>

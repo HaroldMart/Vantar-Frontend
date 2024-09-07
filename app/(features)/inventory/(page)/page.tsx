@@ -33,7 +33,7 @@ export default function InventoryPage() {
   ];
 
 
-  const tableBody = document.querySelector("tbody");
+  // const tableBody = document.querySelector("tbody");
 
   // Función para filtrar por búsqueda
   const filteredInventories = inventories.filter((inventory) =>
@@ -170,7 +170,7 @@ export default function InventoryPage() {
             </thead>
             <tbody>
               {inventories.map((item) => (
-                <tr className="bg-white border-b hover:bg-gray-50">
+                <tr className="bg-white border-b hover:bg-gray-50" key={item.name + "_key"}>
                   <td className="w-4 p-4">
                     <div className="flex items-center">
                       <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />

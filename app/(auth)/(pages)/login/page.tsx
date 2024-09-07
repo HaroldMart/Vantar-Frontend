@@ -63,7 +63,7 @@ export default function Page() {
             </div>
           </form>
           <div className="flex justify-center items-center gap-2 w-full">
-            <p className="text-sm text-gray-500">Don't have an account?</p>
+            <p className="text-sm text-gray-500">Don&apos;t have an account?</p>
             <Link
               href="/register"
               className="text-sm font-medium text-blue-600 hover:text-blue-500"
