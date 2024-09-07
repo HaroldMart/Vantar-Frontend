@@ -22,9 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.variable}>
-        <div className="flex h-screen overflow-y-hidden">
-          <Sidebar />
+      <body className="flex">
+        <Sidebar />
+        <div className="flex flex-1 h-screen overflow-y-auto">
           <div role="main" className="main w-full overflow-auto">{children}</div>
         </div>
       </body>

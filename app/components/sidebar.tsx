@@ -214,7 +214,7 @@ export default function Sidebar() {
 					})}
 				</div>
 				{isFeaturedCardVisible && (
-					<div className="mt-4 p-4 bg-blue-100 rounded-lg relative">
+					<div className="mt-4 p-4 bg-blue-100 rounded-lg relative hidden">
 						<div className="absolute top-2 right-2">
 							<BiX
 								size={24}
