@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <div className="flex bg-gray-100 flex-1 h-screen overflow-y-auto">
           <div role="main" className="main flex flex-col w-full h-auto overflow-auto">
             {children}
