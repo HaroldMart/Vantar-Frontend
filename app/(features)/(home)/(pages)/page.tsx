@@ -4,6 +4,11 @@ import { BiSolidHome } from "react-icons/bi";
 import { users, business, products } from "../../../DATABASE";
 import Link from "next/link";
 
+export type user = {
+  id: string;
+  name: string;
+};
+
 export default function Home() {
     const MY_USER = users[0];
     const user_list = users;
@@ -66,4 +71,22 @@ export default function Home() {
             </div>
         </>
     );
+}
+
+function get_business(MY_USER: user) {
+  if (business != null) {
+    const my_business = business.map((business) => {
+      if (business.user_id == MY_USER.id) {
+        const business_name = business.name;
+        const business_products = products.map((product) => {
+          if (product.business_id == business.id) {
+            return product;
+          }
+        });
+      }
+    });
+    return my_business
+  } else {
+    return "NO HAY NADA";
+  }
 }

@@ -35,7 +35,7 @@ export const business = [
   {
     id: "2",
     user_id: "10",
-    name: "Mi tiendecita",
+    name: "Mi tiendecitaaaaaaaaaaaaaa",
   },
   {
     id: "3",
@@ -56,6 +56,13 @@ export const products = [
     id: "2",
     business_id: "1",
     name: "Celular",
+    unit_price: "10",
+    unit_cost: "30",
+  },
+  {
+    id: "2",
+    business_id: "2",
+    name: "PC",
     unit_price: "10",
     unit_cost: "30",
   },
