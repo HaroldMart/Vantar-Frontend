@@ -4,6 +4,25 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BiChevronDown, BiChevronLeft, BiChevronRight, BiEdit, BiFilter, BiPlus, BiSearch, BiSolidBox, BiTrash } from "react-icons/bi";
 
+// importing the CRUD functions
+import {productService} from "./lib/service"
+import { GenericService } from "../shared/generic_service";
+import { Product } from "./lib/core";
+
+async function CRUD(){
+    const mi_producto : Product = { // this is my product to create
+        id: "4",
+        name: "Aceite",
+        price: 40.0
+    }
+    const generic_service = new GenericService<Product>;
+    const product_service = new productService(generic_service); // this is the one i will use
+    
+    const response = await product_service.create(mi_producto)
+
+    console.log(response)
+}
+
 export default function Layout() {
     const [search, setSearch] = useState("");
     const [filterCategory, setFilterCategory] = useState("All");
@@ -75,7 +94,7 @@ export default function Layout() {
     // Estado para controlar la visibilidad del popup de confirmación de eliminación
     const [showDeletePopup, setShowDeletePopup] = useState(false);
 
-
+    CRUD()
     return (
         <>
             <div className="container mx-auto px-4 pt-8 h-full">
@@ -108,7 +127,6 @@ export default function Layout() {
                             Productos
                         </h1>
                     </div>
-
                     <div className="flex flex-col items-center gap-4">
                         <div className="flex gap-2 w-full">
                             {/* Input de búsqueda visible por defecto */}

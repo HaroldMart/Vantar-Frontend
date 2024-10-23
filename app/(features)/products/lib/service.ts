@@ -1,6 +1,8 @@
 import { API } from "../../shared/api";
 import { IGenericService } from "../../shared/interfaces";
-import { Product } from "./core"
+import { Product } from "./core";
+
+// THIS IS THE ROUTE AND COMMAND FOR RUN THE FAKE DATABASE: "PS P:\Coding\vantar-frontend\app\(features)\shared> pnpm json-server db.json"
 
 export class productService {
   private _service: IGenericService<Product>;
@@ -18,7 +20,7 @@ export class productService {
       return products;
     }
 
-    return "Hubo un error al traer los inventarios";
+    return "Hubo un error al traer los productos";
   }
 
   async get(id: string): Promise<Product | string> {
@@ -30,7 +32,7 @@ export class productService {
       return product;
     }
 
-    return "Hubo un error al traer el inventario";
+    return "Hubo un error al traer el producto";
   }
 
   async create(product: Product): Promise<Product | string> {
@@ -42,7 +44,7 @@ export class productService {
       return product;
     }
 
-    return "Hubo un error al crear el inventario";
+    return "Hubo un error al crear el producto";
   }
 
   async update(id: string, product: Product): Promise<string> {
@@ -51,10 +53,10 @@ export class productService {
 
     if (data == true) {
       console.log("updated");
-      return "El inventario fue actualizado";
+      return "El producto fue actualizado";
     }
 
-    return "Hubo un error al actualizar el inventario";
+    return "Hubo un error al actualizar el producto";
   }
 
   async delete(id: string): Promise<string> {
@@ -63,9 +65,9 @@ export class productService {
 
     if (data == true) {
       console.log("deleted");
-      return "El inventario fue eliminado";
+      return "El producto fue eliminado";
     }
 
-    return "Hubo un error al eliminar el inventario";
+    return "Hubo un error al eliminar el producto";
   }
 }
