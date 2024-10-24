@@ -1,228 +1,213 @@
-'use client'
+// app/inventory/page.tsx
+"use client"; // Esto es necesario para Client Components
 
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import { BiChevronRight, BiTrash } from "react-icons/bi";
-
-// Tipamos el objeto Producto
-interface Product {
-    name: string;
-    price: number;
-    quantity: number;
-    cost: number;
-}
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Link from 'next/link';
 
 interface Inventory {
-    id: number;
+    id: string;
     name: string;
-    products: Product[];
-  }
+    products: any[];
+}
 
-// Lista de productos predefinidos
-const productsList: Product[] = [
-    { name: "Leche", price: 90, quantity: 10, cost: 50 },
-    { name: "Lestamilk", price: 50, quantity: 5, cost: 30 },
-    { name: "Bizcocho", price: 100, quantity: 3, cost: 70 },
-];
+export default function InventoryPage() {
+    const [inventories, setInventories] = useState<Inventory[]>([]);
+    const [currentMonth, setCurrentMonth] = useState<string>('');
+    const [newInventoryName, setNewInventoryName] = useState<string>('');
+    const [editInventory, setEditInventory] = useState<Inventory | null>(null);
+    const [deleteInventoryId, setDeleteInventoryId] = useState<number | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+    const API_URL = 'http://localhost:5000/inventories';
 
-export default function Inventory() {
-    const [searchTerm, setSearchTerm] = useState<string>("");
-    const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-    const [inventory, setInventory] = useState<Product[]>([]);
-
-    // Cargar productos desde localStorage cuando se monta el componente
-    useEffect(() => {
-        const storedInventory = localStorage.getItem('tempInventory');
-        if (storedInventory) {
-            setInventory(JSON.parse(storedInventory));
+    // Función para obtener inventarios desde la API
+    const fetchInventories = async () => {
+        try {
+            const response = await axios.get(API_URL);
+            setInventories(response.data);
+        } catch (error) {
+            console.error("Error al obtener los inventarios", error);
         }
+    };
+
+    // useEffect para cargar los inventarios al cargar la página
+    useEffect(() => {
+        fetchInventories();
+
+        const date = new Date();
+        const monthName = date.toLocaleString('default', { month: 'long' });
+        setCurrentMonth(monthName);
     }, []);
 
-    // Guardar productos temporalmente en localStorage
-    useEffect(() => {
-        if (inventory.length > 0) {
-            localStorage.setItem('tempInventory', JSON.stringify(inventory));
-        }
-    }, [inventory]);
-
-    // Función para añadir productos al inventario
-    const addProduct = (product: Product) => {
-        setInventory((prevInventory) => [...prevInventory, product]);
-    };
-
-    // Función para eliminar un producto del inventario temporal
-    const removeProduct = (productIndex: number) => {
-        setInventory((prevInventory) =>
-            prevInventory.filter((_, index) => index !== productIndex)
-        );
-    };
-
-    // Función para guardar los productos en la API y limpiar el localStorage
-    const saveInventory = async () => {
+    // Crear un nuevo inventario
+    const createInventory = async () => {
         try {
-            // Aquí llamas a la API para guardar el inventario
-            await fetch('http://localhost:5000/inventory', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(inventory),
-            });
-
-            // Limpiar el localStorage después de guardar en la API
-            localStorage.removeItem('tempInventory');
-            alert('Inventario guardado con éxito.');
-        } catch (error) {
-            console.error('Error al guardar el inventario:', error);
-            alert('Ocurrió un error al guardar el inventario.');
-        }
-    };
-
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setSearchTerm(value);
-
-        if (value) {
-            setFilteredProducts(
-                productsList.filter((product) =>
-                    product.name.toLowerCase().includes(value.toLowerCase())
-                )
+            const existingInventoriesForMonth = inventories.filter(inv =>
+                inv.name.startsWith(`Inventario ${currentMonth}`)
             );
-        } else {
-            setFilteredProducts([]);
+            const inventoryNumber = existingInventoriesForMonth.length + 1;
+
+            const generateRandomId = () => {
+                return Math.random().toString(36).substr(2, 9); // Genera un string alfanumérico de 9 caracteres
+            };
+
+            // Luego úsalo en tu código:
+            const newInventory: Inventory = {
+                id: generateRandomId(), // Genera un id único aleatorio
+                name: `Inventario ${currentMonth}${inventoryNumber > 1 ? ` ${inventoryNumber}` : ''}`,
+                products: [],
+            };
+
+            const response = await axios.post(API_URL, newInventory);
+            setInventories([...inventories, response.data]);
+        } catch (error) {
+            console.error("Error al crear el inventario", error);
         }
     };
 
-    const handleAddProduct = (product: Product) => {
-        setInventory([...inventory, { ...product, quantity: 1, cost: product.price }]);
-        setSearchTerm("");
-        setFilteredProducts([]);
-    };
+    // Actualizar el nombre de un inventario
+    const updateInventory = async () => {
+        if (!editInventory) return;
 
-    const handleEditProduct = (
-        index: number,
-        field: keyof Product,
-        value: string | number
-    ) => {
-        const newInventory = [...inventory];
+        try {
+            const updatedInventory = { ...editInventory, name: newInventoryName };
+            const response = await axios.put(`${API_URL}/${editInventory.id}`, updatedInventory);
 
-        // Validar si el campo es numérico antes de asignar el valor
-        if (field === 'price' || field === 'quantity' || field === 'cost') {
-            newInventory[index][field] = +value; // Convertimos a número
-        } else {
-            newInventory[index][field] = value as string; // Si no es numérico, lo tratamos como string
+            setInventories(inventories.map(inv => (inv.id === editInventory.id ? response.data : inv)));
+            setEditInventory(null);
+            setNewInventoryName('');
+        } catch (error) {
+            console.error("Error al actualizar el inventario", error);
         }
-
-        setInventory(newInventory);
     };
 
-    const handleDeleteProduct = (index: number) => {
-        const newInventory = [...inventory];
-        newInventory.splice(index, 1);
-        setInventory(newInventory);
+    // Eliminar un inventario
+    const deleteInventory = async (id: number) => {
+        try {
+            await axios.delete(`${API_URL}/${id}`);
+            setInventories(inventories.filter(inv => inv.id !== id));
+            setDeleteInventoryId(null);
+            setSuccessMessage('Inventario eliminado exitosamente.');
+        } catch (error) {
+            console.error("Error al eliminar el inventario", error);
+        }
     };
+
+    // Mostrar mensaje de confirmación y ocultarlo después de unos segundos
+    useEffect(() => {
+        if (successMessage) {
+            const timer = setTimeout(() => {
+                setSuccessMessage(null);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [successMessage]);
 
     return (
-        <>
-            <div className="container mx-auto px-4 pt-8 h-full">
-                <div className="h-full">
-                    <nav className="flex px-5 py-3 mb-4 text-gray-700 border border-gray-200 rounded-lg bg-gray-50" aria-label="Breadcrumb">
-                        <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-                            <li className="inline-flex items-center">
-                                <Link href={"/"} className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-all duration-200 hover:scale-105">
-                                    <svg className="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
-                                    </svg>
-                                    Home
-                                </Link>
-                            </li>
-                            <li>
-                                <div className="flex items-center">
-                                    <BiChevronRight />
-                                    <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2">
-                                        Inventory
-                                    </span>
-                                </div>
-                            </li>
-                        </ol>
-                    </nav>
-                    <div className="flex justify-around">
-                    <h1 className="flex gap-2 items-center text-4xl font-medium text-gray-700 mb-6">
-                        Inventarios
-                    </h1>
-                    <button onClick={saveInventory}>Guardar Inventario</button>
-                    </div>
+        <div className="container mx-auto px-4 pt-8">
+            <h1 className="text-2xl font-bold mb-4">Gestión de Inventarios</h1>
 
-                    <div className="flex flex-col items-center gap-4">
+            {/* Botón para crear nuevo inventario */}
+            <button
+                onClick={createInventory}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+                Crear Inventario
+            </button>
+
+            {/* Mostrar inventarios existentes */}
+            <h2 className="text-xl font-semibold mt-6">Inventarios Existentes</h2>
+            <ul className="list-disc pl-5">
+                {inventories.length > 0 ? (
+                    inventories.map((inv) => (
+                        <li key={inv.id} className="mt-2 flex justify-between items-center">
+                            <Link href={`/inventory/${inv.id}`}>
+                                {inv.name}
+                            </Link>
+
+                            {/* Botones de editar y eliminar */}
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setEditInventory(inv)}
+                                    className="px-2 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
+                                >
+                                    Editar
+                                </button>
+                                <button
+                                    onClick={() => setDeleteInventoryId(inv.id)}
+                                    className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                                >
+                                    Eliminar
+                                </button>
+                            </div>
+                        </li>
+                    ))
+                ) : (
+                    <p>No hay inventarios disponibles.</p>
+                )}
+            </ul>
+
+            {/* Dialog para editar inventario */}
+            {editInventory && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded shadow-lg">
+                        <h3 className="text-xl font-bold mb-4">Editar Inventario</h3>
                         <input
                             type="text"
-                            placeholder="Buscar producto"
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                            className="border rounded px-4 py-2"
+                            value={newInventoryName}
+                            onChange={(e) => setNewInventoryName(e.target.value)}
+                            placeholder="Nuevo nombre"
+                            className="w-full p-2 border rounded mb-4"
                         />
-
-                        {/* Muestra resultados filtrados */}
-                        {filteredProducts.length > 0 && (
-                            <ul className="border rounded w-full">
-                                {filteredProducts.map((product, index) => (
-                                    <li
-                                        key={index}
-                                        onClick={() => handleAddProduct(product)}
-                                        className="px-4 py-2 cursor-pointer hover:bg-gray-200"
-                                    >
-                                        {product.name} - {product.price}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-
-                        {/* Tabla del inventario */}
-                        <table className="w-full text-sm text-left text-gray-500">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                                <tr>
-                                    <th scope="col" className="p-4">Nombre</th>
-                                    <th scope="col" className="p-4">Cantidad</th>
-                                    <th scope="col" className="p-4">Costo</th>
-                                    <th scope="col" className="p-4">Precio</th>
-                                    <th scope="col" className="p-4">Total</th>
-                                    <th scope="col" className="p-4">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {inventory.map((item, index) => (
-                                    <tr key={index}>
-                                        <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{item.name}</td>
-                                        <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                            <input
-                                                type="number"
-                                                value={item.quantity || 1}
-                                                onChange={(e) => handleEditProduct(index, "quantity", +e.target.value)}
-                                            />
-                                        </td>
-                                        <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                            <input
-                                                type="number"
-                                                value={item.cost || 0}
-                                                onChange={(e) => handleEditProduct(index, "cost", +e.target.value)}
-                                            />
-                                        </td>
-                                        <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{item.price}</td>
-                                        <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{item.price * (item.quantity || 1)}</td>
-                                        <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                            <button onClick={() => handleDeleteProduct(index)}>
-                                                <BiTrash size={18} />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-
+                        <div className="flex justify-end gap-2">
+                            <button
+                                onClick={updateInventory}
+                                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                            >
+                                Guardar
+                            </button>
+                            <button
+                                onClick={() => setEditInventory(null)}
+                                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                            >
+                                Cancelar
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </>
+            )}
+
+            {/* Dialog para confirmar eliminación */}
+            {deleteInventoryId && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded shadow-lg">
+                        <h3 className="text-xl font-bold mb-4">¿Estás seguro de que deseas eliminar este inventario?</h3>
+                        <div className="flex justify-end gap-2">
+                            <button
+                                onClick={() => deleteInventory(deleteInventoryId)}
+                                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                            >
+                                Eliminar
+                            </button>
+                            <button
+                                onClick={() => setDeleteInventoryId(null)}
+                                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Popup de confirmación de eliminación */}
+            {successMessage && (
+                <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
+                    {successMessage}
+                </div>
+            )}
+        </div>
     );
 }

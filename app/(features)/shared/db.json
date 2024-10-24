@@ -36,39 +36,21 @@
       "price": 85
     }
   ],
-  "inventory": [
+  "inventories": [
     {
-      "id": 1,
-      "name": "Inventario 1",
-      "products": [
-        {
-          "name": "Leche",
-          "price": 100,
-          "quantity": 4,
-          "cost": 50
-        },
-        {
-          "name": "Bizcocho",
-          "price": 250,
-          "quantity": 2,
-          "cost": 100
-        }
-      ]
+      "id": "3evwkno6q",
+      "name": "Inventario octubre 2",
+      "products": []
     },
     {
-      "0": {
-        "name": "Lestamilk",
-        "price": 50,
-        "quantity": 10,
-        "cost": 50
-      },
-      "1": {
-        "name": "Leche",
-        "price": 90,
-        "quantity": 1,
-        "cost": 90
-      },
-      "id": "71ee"
+      "id": "tlei80wzj",
+      "name": "Inventario octubre 3",
+      "products": []
+    },
+    {
+      "id": "xifvpu8at",
+      "name": "Inventario octubre 3",
+      "products": []
     }
   ]
 }
