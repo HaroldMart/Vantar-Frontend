@@ -1,39 +1,24 @@
 {
   "products": [
     {
-      "id": "ac32",
-      "name": "Aguacate",
-      "price": "75"
-    },
-    {
-      "id": "c586",
-      "name": "Ñame",
-      "price": 100
-    },
-    {
-      "id": "3577",
-      "name": "Piña",
-      "price": 100
-    },
-    {
       "id": "926f",
       "name": "Chinola ",
       "price": 25
     },
     {
-      "id": "d8e9",
-      "name": "Arroz saco 100lbs",
-      "price": 1950
-    },
-    {
       "id": "2815",
-      "name": "Habichuela gira 1lbs",
+      "name": "Habichuela Roja 1lbs",
       "price": 75
     },
     {
       "id": "946e",
       "name": "Guandules secos 1lbs",
       "price": 85
+    },
+    {
+      "id": "3d44",
+      "name": "Caña",
+      "price": 100
     }
   ],
   "inventories": [
@@ -45,7 +30,33 @@
     {
       "id": "tlei80wzj",
       "name": "Inventario octubre 3",
-      "products": []
+      "products": [
+        {
+          "id": "ac32",
+          "name": "Aguacate",
+          "price": "75"
+        },
+        {
+          "id": "c586",
+          "name": "Ñame",
+          "price": 100
+        },
+        {
+          "id": "926f",
+          "name": "Chinola ",
+          "price": 25
+        },
+        {
+          "id": "2815",
+          "name": "Habichuela gira 1lbs",
+          "price": 75
+        },
+        {
+          "id": "946e",
+          "name": "Guandules secos 1lbs",
+          "price": 85
+        }
+      ]
     },
     {
       "id": "xifvpu8at",

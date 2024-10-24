@@ -4,6 +4,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { products } from "@/POSIBLE ELIMINAR/DATABASE";
+
+
+const productsList = products;
 
 const InventoryDetail = ({ params }) => {
     const [inventory, setInventory] = useState(null);
@@ -68,14 +72,6 @@ const InventoryDetail = ({ params }) => {
         }
     };
 
-    const handleSearch = (event) => {
-        const value = event.target.value.toLowerCase();
-        setSearchTerm(value);
-        const filtered = products.filter((product) =>
-            product.name.toLowerCase().includes(value)
-        );
-        setFilteredProducts(filtered);
-    };
 
     const handleDeleteProduct = async (productId) => {
         const updatedProducts = products.filter((product) => product.id !== productId);
@@ -90,16 +86,54 @@ const InventoryDetail = ({ params }) => {
         }
     };
 
+    const handleSearch = (event) => {
+        const value = event.target.value.toLowerCase();
+        setSearchTerm(value);
+        const filtered = products.filter((product) =>
+            product.name.toLowerCase().includes(value)
+        );
+        setFilteredProducts(filtered);
+    };
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.toLowerCase();
+        // const value = e.target.value;
+        
+        setSearchTerm(value);
+
+        if (value) {
+            setFilteredProducts(
+                productsList.filter((product) =>
+                    product.name.toLowerCase().includes(value.toLowerCase())
+                )
+            );
+        } else {
+            setFilteredProducts([]);
+        }
+    };
+
     return (
         <div>
             <h1>{inventory?.name}</h1>
 
-            <input
+            {/* <input
                 type="text"
                 placeholder="Buscar productos"
                 value={searchTerm}
                 onChange={handleSearch}
+            /> */}
+            <input
+                type="text"
+                placeholder="Buscar producto"
+                value={searchTerm}
+                onChange={handleSearchChange}
             />
+            <ul>
+                {filteredProducts.map((product, index) => (
+                    <li key={index} onClick={() => handleAddProduct(product)}>
+                        {product.name} - {product.price}
+                    </li>
+                ))}
+            </ul>
 
             <h2>Productos en el inventario:</h2>
             <ul>

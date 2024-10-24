@@ -1,9 +1,11 @@
 
 import { useEffect, useState } from "react";
 import { BiChevronDown, BiEdit, BiFilter, BiSearch, BiTrash } from "react-icons/bi";
-import { productService } from "../lib/service"
+import { productService } from "../lib/service";
 import { GenericService } from "../../shared/generic_service";
 import { Product } from "../lib/core";
+
+const productApiService = new productService(new GenericService());
 
 import axios from 'axios';
 
@@ -49,12 +51,14 @@ export const ProductsTable: React.FC = () => {
     // Elementos actuales a mostrar
     const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
-
-    // Función para obtener los productos desde la API
     const fetchProducts = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/products');
-            setProducts(response.data);
+            const products = await productApiService.getAll();
+            if (typeof products === 'string') {
+                console.error(products);
+            } else {
+                setProducts(products);
+            }
         } catch (error) {
             console.error("Error obteniendo productos:", error);
         }
@@ -66,30 +70,58 @@ export const ProductsTable: React.FC = () => {
         setNewProduct({ ...newProduct, [name]: value });
     };
 
-    // Función para añadir un nuevo producto
     const addProduct = async (e: React.FormEvent) => {
-        e.preventDefault();  // Evita el refresco de la página
+        e.preventDefault();
+        const newProductData = { name: newProduct.name, price: parseFloat(newProduct.price) };
+
         try {
-            const response = await axios.post('http://localhost:5000/products', {
-                name: newProduct.name,
-                price: parseFloat(newProduct.price),  // Convertir el precio a número
-            });
-            setProducts([...products, response.data]); // Actualizamos la lista de productos
-            setNewProduct({ name: "", price: "" }); // Limpiamos el formulario
+            const createdProduct = await productApiService.create(newProductData);
+            if (typeof createdProduct === 'string') {
+                console.error(createdProduct);  // Mostrar error si lo hubo
+            } else {
+                setProducts([...products, createdProduct]); // Actualizamos la lista de productos
+                setNewProduct({ name: "", price: "" }); // Limpiamos el formulario
+            }
         } catch (error) {
             console.error("Error añadiendo producto:", error);
         }
     };
 
-    // Función para eliminar un producto
     const deleteProduct = async () => {
-        if (!productToDelete) return; // Asegurarse de que hay un producto para eliminar
+        if (!productToDelete) return;
         try {
-            await axios.delete(`http://localhost:5000/products/${productToDelete.id}`);
-            setProducts(products.filter(product => product.id !== productToDelete.id)); // Filtrar el producto eliminado
-            setShowDeletePopup(false);
+            const deleteMessage = await productApiService.delete(productToDelete.id);
+            if (deleteMessage === 'El producto fue eliminado') {
+                setProducts(products.filter(product => product.id !== productToDelete.id));
+                setShowDeletePopup(false);
+            } else {
+                console.error(deleteMessage);
+            }
         } catch (error) {
             console.error("Error eliminando producto:", error);
+        }
+    };
+
+    // Función para abrir el popup de eliminación
+    const handleDelete = (product: Product) => {
+        setProductToDelete(product); // Establecer el producto a eliminar
+        setShowDeletePopup(true);
+    };
+
+    const updateProduct = async () => {
+        if (!currentProduct) return;
+        try {
+            const updateMessage = await productApiService.update(currentProduct.id, currentProduct);
+            if (updateMessage === 'El producto fue actualizado') {
+                setProducts(products.map(product =>
+                    product.id === currentProduct.id ? currentProduct : product
+                ));
+                setShowEditPopup(false);
+            } else {
+                console.error(updateMessage);
+            }
+        } catch (error) {
+            console.error("Error actualizando producto:", error);
         }
     };
 
@@ -99,31 +131,11 @@ export const ProductsTable: React.FC = () => {
         setShowEditPopup(true);
     };
 
-    // Función para abrir el popup de eliminación
-    const handleDelete = (product: Product) => {
-        setProductToDelete(product); // Establecer el producto a eliminar
-        setShowDeletePopup(true);
-    };
-
-    // Función para actualizar el producto editado
-    const updateProduct = async () => {
-        if (!currentProduct) return;  // Comprobar si currentProduct es nulo
-        try {
-            await axios.put(`http://localhost:5000/products/${currentProduct.id}`, currentProduct);
-            setProducts(products.map(product =>
-                product.id === currentProduct.id ? currentProduct : product
-            ));
-            setShowEditPopup(false);
-        } catch (error) {
-            console.error("Error actualizando producto:", error);
-        }
-    };
-
     // Manejar cambios en los inputs de edición
     const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!currentProduct) return;  // Comprobar si currentProduct es nulo
+        if (!currentProduct) return;
         const { name, value } = e.target;
-        setCurrentProduct({ ...currentProduct, [name]: value } as Product); // Casting a Product
+        setCurrentProduct({ ...currentProduct, [name]: value } as Product);
     };
 
     // Llamamos a la función para obtener los productos cuando el componente se monta
