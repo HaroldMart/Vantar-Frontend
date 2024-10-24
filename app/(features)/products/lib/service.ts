@@ -49,7 +49,7 @@ export class productService {
 
   async update(id: string, product: Product): Promise<string> {
     const url = API + `products/${id}`;
-    const data = await this._service.updateItem(url, id, product);
+    const data = await this._service.updateItem(url, product);
 
     if (data == true) {
       console.log("updated");
@@ -61,7 +61,7 @@ export class productService {
 
   async delete(id: string): Promise<string> {
     const url = API + `products/${id}`;
-    const data = await this._service.deleteItem(url, id);
+    const data = await this._service.deleteItem(url);
 
     if (data == true) {
       console.log("deleted");
