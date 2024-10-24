@@ -71,7 +71,7 @@ export class GenericService<T> implements IGenericService<T> {
     }
   }
 
-  async updateItem(url: string, id: string, item: T): Promise<boolean> {
+  async updateItem(url: string, item: T): Promise<boolean> {
     const method = "PUT";
 
     try {
@@ -96,7 +96,7 @@ export class GenericService<T> implements IGenericService<T> {
     }
   }
 
-  async deleteItem(url: string, id: string): Promise<boolean> {
+  async deleteItem(url: string): Promise<boolean> {
     const method = "DELETE";
 
     try {
