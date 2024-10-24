@@ -35,5 +35,40 @@
       "name": "Guandules secos 1lbs",
       "price": 85
     }
+  ],
+  "inventory": [
+    {
+      "id": 1,
+      "name": "Inventario 1",
+      "products": [
+        {
+          "name": "Leche",
+          "price": 100,
+          "quantity": 4,
+          "cost": 50
+        },
+        {
+          "name": "Bizcocho",
+          "price": 250,
+          "quantity": 2,
+          "cost": 100
+        }
+      ]
+    },
+    {
+      "0": {
+        "name": "Lestamilk",
+        "price": 50,
+        "quantity": 10,
+        "cost": 50
+      },
+      "1": {
+        "name": "Leche",
+        "price": 90,
+        "quantity": 1,
+        "cost": 90
+      },
+      "id": "71ee"
+    }
   ]
 }

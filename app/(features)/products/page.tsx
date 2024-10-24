@@ -6,7 +6,7 @@ import { BiChevronRight } from "react-icons/bi";
 // importing the CRUD functions
 import { ProductsTable } from "./components/ProductsTable";
 
-export default function Layout() {
+export default function Product() {
     return (
         <>
             <div className="container mx-auto px-4 pt-8 h-full">
