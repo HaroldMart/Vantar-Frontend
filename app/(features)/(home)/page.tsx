@@ -14,6 +14,7 @@ export default function Home() {
           Pagina de inicio
         </h1>
         <Link href={"products"}>Ir a productos</Link>
+        <Link href={"inventory"}>Ir a inventarios</Link>
       </div>
     </>
   );

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { BiChevronRight } from "react-icons/bi";
 
-// importing the CRUD functions
 import { ProductsTable } from "./components/ProductsTable";
 
 export default function Product() {
@@ -37,6 +36,7 @@ export default function Product() {
                             Productos
                         </h1>
                     </div>
+
                     <div className="flex flex-col items-center gap-4">
                         <ProductsTable />
                     </div>
