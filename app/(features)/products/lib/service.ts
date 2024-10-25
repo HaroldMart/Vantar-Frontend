@@ -5,7 +5,8 @@ import { Product } from "./core";
 // THIS IS THE ROUTE AND COMMAND FOR RUN THE FAKE DATABASE: "PS P:\Coding\vantar-frontend\app\(features)\shared> pnpm json-server db.json"
 
 export class productService {
-  private _service: IGenericService<Product>;
+  
+  private readonly _service: IGenericService<Product>;
 
   constructor(service: IGenericService<Product>) {
     this._service = service;
