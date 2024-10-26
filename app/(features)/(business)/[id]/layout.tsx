@@ -1,6 +1,5 @@
 
 import type { Metadata } from "next";
-import Sidebar from "../components/sidebar";
 
 export const metadata: Metadata = {
     title: "Vantar",

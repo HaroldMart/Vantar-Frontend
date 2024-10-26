@@ -10,7 +10,7 @@ export class businessService {
   constructor(service: IGenericService<Business>) {
     this._service = service;
   }
-  
+
   async getAllTest(id: string): Promise<Business[] | string> {
     const url = API + `businesses/${id}`;
     const data = await this._service.getAllItems(url);
