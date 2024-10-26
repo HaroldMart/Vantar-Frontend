@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Business_Card(business : string, products : Product[]) {
+export default function Business_Card(business: string, products: Product[]) {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="bg-primary text-primary-foreground p-6 rounded-t-lg">
@@ -8,13 +8,13 @@ export default function Business_Card(business : string, products : Product[]) {
       </CardHeader>
       <CardContent className="p-6 space-y-4">
         <div className="grid gap-4">
-        {products.map((product) => {
-            return  <div className="flex items-start gap-4">
-            <div className="space-y-1">
-              <h3 className="text-lg font-medium">{product.name}</h3>
+          {products.map((product) => {
+            return <div className="flex items-start gap-4">
+              <div className="space-y-1">
+                <h3 className="text-lg font-medium">{product.name}</h3>
+              </div>
             </div>
-          </div>
-        })}
+          })}
         </div>
       </CardContent>
       {/* <CardFooter className="bg-muted p-6 rounded-b-lg">
@@ -25,8 +25,8 @@ export default function Business_Card(business : string, products : Product[]) {
 }
 
 export type Product = {
-    id: number,
-    name: string
+  id: number,
+  name: string
 }
 
 // Card Component

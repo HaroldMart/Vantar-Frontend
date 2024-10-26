@@ -5,7 +5,10 @@ import { BiChevronRight } from "react-icons/bi";
 
 import { ProductsTable } from "./components/ProductsTable";
 
-export default function Product() {
+export default function Product({ params }: { params: Record<string, string | string[]> }) {
+    // Verifica si el id es un string o un array y extrae el valor apropiado
+    const id = Array.isArray(params.id) ? params.id[0] : params.id;
+
     return (
         <>
             <div className="container mx-auto px-4 pt-8 h-full">
@@ -33,12 +36,12 @@ export default function Product() {
                             </ol>
                         </nav>
                         <h1 className="flex gap-2 items-center text-4xl font-medium text-gray-700 mb-6">
-                            Productos
+                            Productos - {id}
                         </h1>
                     </div>
 
                     <div className="flex flex-col items-center gap-4">
-                        <ProductsTable />
+                        <ProductsTable businessId={id} />
                     </div>
                 </div>
             </div>

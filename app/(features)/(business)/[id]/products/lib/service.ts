@@ -1,5 +1,5 @@
-import { API } from "../../shared/api";
-import { IGenericService } from "../../shared/interfaces";
+import { API } from "../../../../shared/api";
+import { IGenericService } from "../../../../shared/interfaces";
 import { Product } from "./core";
 
 // THIS IS THE ROUTE AND COMMAND FOR RUN THE FAKE DATABASE: "PS P:\Coding\vantar-frontend\app\(features)\shared> pnpm json-server db.json"
@@ -11,8 +11,8 @@ export class productService {
     this._service = service;
   }
 
-  async getAll(): Promise<Product[] | string> {
-    const url = API + "products";
+  async getAll(businessId: string): Promise<Product[] | string> {
+    const url = API + businessId +"/products";
     const data = await this._service.getAllItems(url);
 
     if (typeof data == "object") {

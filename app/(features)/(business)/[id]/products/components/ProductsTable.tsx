@@ -1,31 +1,38 @@
 import { useEffect, useState } from "react";
 import { BiChevronDown, BiEdit, BiFilter, BiSearch, BiTrash } from "react-icons/bi";
 import { productService } from "../lib/service";
-import { GenericService } from "../../shared/generic_service";
+import { GenericService } from "../../../../shared/generic_service";
 import { Product } from "../lib/core";
+import { Business } from "../../../lib/core";
+import { businessService } from "../../../lib/service";
 
 const productApiService = new productService(new GenericService());
+const businessApiService = new businessService(new GenericService());
 
-import axios from 'axios';
+interface ProductsTableProps {
+    businessId: string;
+}
 
-export const ProductsTable: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [newProduct, setNewProduct] = useState({ name: "", price: "" });
-  const [showEditPopup, setShowEditPopup] = useState(false);
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
-  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
+export const ProductsTable: React.FC<ProductsTableProps> = ({ businessId }) => {
+    const [businesses, setBusinesses] = useState<Business[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [newProduct, setNewProduct] = useState({ name: "", price: "" });
+    const [showEditPopup, setShowEditPopup] = useState(false);
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
+    const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterAccessories, setFilterAccessories] = useState("All");
   const [filterAvailable, setFilterAvailable] = useState("All");
 
-  // Estados para los select
-  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [isAvailableOpen, setIsAvailableOpen] = useState(false);
-  const [isAccessoriesOpen, setIsAccessoriesOpen] = useState(false);
+    // Estados para los select
+    const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+    const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+    const [isAvailableOpen, setIsAvailableOpen] = useState(false);
+    const [isAccessoriesOpen, setIsAccessoriesOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -51,37 +58,40 @@ export const ProductsTable: React.FC = () => {
     indexOfLastItem
   );
 
-    const fetchProducts = async () => {
-        try {
-            const products = await productApiService.getAll();
-            if (typeof products === 'string') {
-                console.error(products);
-            } else {
-                setProducts(products);
-            }
-        } catch (error) {
-            console.error("Error obteniendo productos:", error);
-        }
-    };
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const data = await productApiService.getAll(businessId);
+                const businesses = await businessApiService.getAllTest(businessId);
 
-  // Función para añadir un nuevo producto
-  const addProduct = async (e: React.FormEvent) => {
-    e.preventDefault(); // Evita el refresco de la página
-    try {
-      const response = await axios.post("http://localhost:5000/products", {
-        name: newProduct.name,
-        price: parseFloat(newProduct.price), // Convertir el precio a número
-      });
-      setProducts([...products, response.data]); // Actualizamos la lista de productos
-      setNewProduct({ name: "", price: "" }); // Limpiamos el formulario
-    } catch (error) {
-      console.error("Error añadiendo producto:", error);
-    }
-  };
+                if (typeof data === "string") {
+                    console.error(data);  // Error en el mensaje
+                } else {
+                    setProducts(data);
+                }
+            } catch (error) {
+                console.error("Error obteniendo productos:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, [businessId]);
+
+    // Actualiza el estado del formulario
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setNewProduct({ ...newProduct, [name]: value });
+    };
 
     const addProduct = async (e: React.FormEvent) => {
         e.preventDefault();
-        const newProductData = { name: newProduct.name, price: parseFloat(newProduct.price) };
+        const newProductData: Product = {
+            id: generateId(), // Generar un ID único
+            name: newProduct.name,
+            price: parseFloat(newProduct.price),
+        };
 
         try {
             const createdProduct = await productApiService.create(newProductData);
@@ -94,6 +104,11 @@ export const ProductsTable: React.FC = () => {
         } catch (error) {
             console.error("Error añadiendo producto:", error);
         }
+    };
+
+    // Función para generar un ID único (puedes usar la lógica que prefieras)
+    const generateId = (): string => {
+        return Math.random().toString(36).substring(2, 9); // Ejemplo de generación de ID
     };
 
     const deleteProduct = async () => {
@@ -147,71 +162,16 @@ export const ProductsTable: React.FC = () => {
         setCurrentProduct({ ...currentProduct, [name]: value } as Product);
     };
 
-  return (
-    <>
-      {/* Formulario para añadir nuevos productos */}
-      <form onSubmit={addProduct}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Product Name"
-          value={newProduct.name}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="number"
-          name="price"
-          placeholder="Product Price"
-          value={newProduct.price}
-          onChange={handleInputChange}
-          required
-        />
-        <button type="submit">Add Product</button>
-      </form>
-
-      <div className="flex flex-col items-center gap-4 w-full">
-        <div className="flex gap-2 w-full">
-          {/* Input de búsqueda visible por defecto */}
-          <div className="flex items-center gap-2">
-            <form className="max-w-lg mx-auto">
-              <div className="flex w-[450px]">
-                {/* Filtro por categoría */}
-                <div className="relative w-full max-w-36">
-                  <label htmlFor="category" className="sr-only">
-                    Filtrar por Categoría
-                  </label>
-                  <select
-                    id="category"
-                    value={filterCategory}
-                    disabled
-                    onChange={(e) => setFilterCategory(e.target.value)}
-                    onFocus={() => setIsCategoryOpen(true)}
-                    onBlur={() => setIsCategoryOpen(false)}
-                    className="bg-gray-50 border border-gray-300 rounded-l-lg text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 appearance-none pr-10"
-                  >
-                    <option value="All">All categories</option>
-                    <option value="NoneNA">Nothing</option>
-                  </select>
-
-                  {/* Ícono personalizado para Categoría */}
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <BiChevronDown
-                      size={20}
-                      className={`transition-transform duration-300 ${
-                        isCategoryOpen ? "rotate-90" : ""
-                      }`}
-                    />
-                  </div>
-                </div>
-                <div className="relative w-full">
-                  <input
-                    type="search"
-                    id="search-products-dropdown"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Search Products..."
+    return (
+        <>
+            {/* Formulario para añadir nuevos productos */}
+            <form onSubmit={addProduct}>
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Product Name"
+                    value={newProduct.name}
+                    onChange={handleInputChange}
                     required
                   />
                   <button
@@ -298,7 +258,98 @@ export const ProductsTable: React.FC = () => {
                     }`}
                   />
                 </div>
-              </div>
+                <div className="flex flex-col items-center w-full gap-7 relative shadow-md sm:rounded-lg max-h-[430px] overflow-y-auto">
+                    {loading ? (
+                        <p>Cargando productos...</p>
+                    ) : (
+                        <table className="w-full text-sm text-left text-gray-500">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" className="p-4">
+                                        <div className="flex items-center">
+                                            <input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />
+                                            <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">ID</th>
+                                    <th scope="col" className="px-6 py-3">Name</th>
+                                    <th scope="col" className="px-6 py-3">Price</th>
+                                    <th scope="col" className="px-6 py-3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    currentItems.map((product) => (
+                                        <tr key={product.id}>
+                                            <td className="w-4 p-4">
+                                                <div className="flex items-center">
+                                                    <input id={`checkbox-${product.id}`} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />
+                                                    <label htmlFor={`checkbox-${product.id}`} className="sr-only">checkbox</label>
+                                                </div>
+                                            </td>
+                                            <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{product.id}</td>
+                                            <td className="px-6 py-4">{product.name}</td>
+                                            <td className="px-6 py-4">{product.price}</td>
+                                            <td className="px-6 py-4 flex space-x-4">
+                                                <button
+                                                    onClick={() => handleEdit(product)}
+                                                    className="text-blue-500 hover:text-blue-700"
+                                                >
+                                                    <BiEdit size={18} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(product)}
+                                                    className="text-red-500 hover:text-red-700"
+                                                >
+                                                    <BiTrash size={18} />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+                <nav aria-label="Page navigation example">
+                    <ul className="flex items-center -space-x-px h-8 text-sm">
+                        <li>
+                            <button
+                                onClick={() => setCurrentPage(prevPage => Math.max(prevPage - 1, 1))}
+                                disabled={currentPage === 1}
+                                className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700"
+                            >
+                                <span className="">Previous</span>
+                                {/* <BiChevronLeft size={24} /> */}
+                            </button>
+                        </li>
+
+                        {[...Array(totalPages)].map((_, index) => (
+                            <li key={index}>
+                                <button
+                                    onClick={() => setCurrentPage(index + 1)}
+                                    className={`flex items-center justify-center px-3 h-8 leading-tight transition-all duration-100 border-gray-300 ${currentPage === index + 1
+                                        ? "text-white bg-blue-600 border hover:bg-blue-700 hover:text-white"
+                                        : "text-gray-500 bg-white border hover:bg-gray-100 hover:text-gray-700"
+                                        }`}
+                                >
+                                    {index + 1}
+                                </button>
+                            </li>
+                        ))}
+
+                        <li>
+                            <button
+                                onClick={() => setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages))}
+                                disabled={currentPage === totalPages}
+                                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700"
+                            >
+                                <span className="">Next</span>
+                                {/* <BiChevronRight size={24} /> */}
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
           )}
         </div>
