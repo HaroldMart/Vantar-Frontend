@@ -87,7 +87,7 @@ export default function InventoryPage() {
     const deleteInventory = async (id: number) => {
         try {
             await axios.delete(`${API_URL}/${id}`);
-            setInventories(inventories.filter(inv => inv.id !== id));
+            setInventories(inventories.filter(inv => inv.id !== String(id))); // Convertir id a string
             setDeleteInventoryId(null);
             setSuccessMessage('Inventario eliminado exitosamente.');
         } catch (error) {
@@ -165,7 +165,7 @@ export default function InventoryPage() {
                                                     Editar
                                                 </button>
                                                 <button
-                                                    onClick={() => setDeleteInventoryId(inv.id)}
+                                                    onClick={() => setDeleteInventoryId(Number(inv.id))}
                                                     className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700"
                                                 >
                                                     Eliminar

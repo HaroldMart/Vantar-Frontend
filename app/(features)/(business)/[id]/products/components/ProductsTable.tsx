@@ -2,14 +2,20 @@
 import { useEffect, useState } from "react";
 import { BiChevronDown, BiEdit, BiFilter, BiSearch, BiTrash } from "react-icons/bi";
 import { productService } from "../lib/service";
-import { GenericService } from "../../shared/generic_service";
+import { GenericService } from "../../../../shared/generic_service";
 import { Product } from "../lib/core";
+import { Business } from "../../../lib/core";
+import { businessService } from "../../../lib/service";
 
 const productApiService = new productService(new GenericService());
+const businessApiService = new businessService(new GenericService());
 
-import axios from 'axios';
+interface ProductsTableProps {
+    businessId: string;
+}
 
-export const ProductsTable: React.FC = () => {
+export const ProductsTable: React.FC<ProductsTableProps> = ({ businessId }) => {
+    const [businesses, setBusinesses] = useState<Business[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [newProduct, setNewProduct] = useState({ name: "", price: "" });
     const [showEditPopup, setShowEditPopup] = useState(false);
@@ -27,6 +33,7 @@ export const ProductsTable: React.FC = () => {
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
     const [isAvailableOpen, setIsAvailableOpen] = useState(false);
     const [isAccessoriesOpen, setIsAccessoriesOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -51,18 +58,26 @@ export const ProductsTable: React.FC = () => {
     // Elementos actuales a mostrar
     const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
-    const fetchProducts = async () => {
-        try {
-            const products = await productApiService.getAll();
-            if (typeof products === 'string') {
-                console.error(products);
-            } else {
-                setProducts(products);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const data = await productApiService.getAll(businessId);
+                const businesses = await businessApiService.getAllTest(businessId);
+
+                if (typeof data === "string") {
+                    console.error(data);  // Error en el mensaje
+                } else {
+                    setProducts(data);
+                }
+            } catch (error) {
+                console.error("Error obteniendo productos:", error);
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            console.error("Error obteniendo productos:", error);
-        }
-    };
+        };
+
+        fetchProducts();
+    }, [businessId]);
 
     // Actualiza el estado del formulario
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,7 +87,11 @@ export const ProductsTable: React.FC = () => {
 
     const addProduct = async (e: React.FormEvent) => {
         e.preventDefault();
-        const newProductData = { name: newProduct.name, price: parseFloat(newProduct.price) };
+        const newProductData: Product = {
+            id: generateId(), // Generar un ID único
+            name: newProduct.name,
+            price: parseFloat(newProduct.price),
+        };
 
         try {
             const createdProduct = await productApiService.create(newProductData);
@@ -85,6 +104,11 @@ export const ProductsTable: React.FC = () => {
         } catch (error) {
             console.error("Error añadiendo producto:", error);
         }
+    };
+
+    // Función para generar un ID único (puedes usar la lógica que prefieras)
+    const generateId = (): string => {
+        return Math.random().toString(36).substring(2, 9); // Ejemplo de generación de ID
     };
 
     const deleteProduct = async () => {
@@ -137,12 +161,6 @@ export const ProductsTable: React.FC = () => {
         const { name, value } = e.target;
         setCurrentProduct({ ...currentProduct, [name]: value } as Product);
     };
-
-    // Llamamos a la función para obtener los productos cuando el componente se monta
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
 
     return (
         <>
@@ -284,53 +302,58 @@ export const ProductsTable: React.FC = () => {
                         </div>
                     )}
                 </div>
-
                 <div className="flex flex-col items-center w-full gap-7 relative shadow-md sm:rounded-lg max-h-[430px] overflow-y-auto">
-                    <table className="w-full text-sm text-left text-gray-500">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" className="p-4">
-                                    <div className="flex items-center">
-                                        <input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />
-                                        <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-6 py-3">ID</th>
-                                <th scope="col" className="px-6 py-3">Name</th>
-                                <th scope="col" className="px-6 py-3">Price</th>
-                                <th scope="col" className="px-6 py-3">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {currentItems.map((product) => (
-                                <tr key={product.id}>
-                                    <td className="w-4 p-4">
+                    {loading ? (
+                        <p>Cargando productos...</p>
+                    ) : (
+                        <table className="w-full text-sm text-left text-gray-500">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" className="p-4">
                                         <div className="flex items-center">
-                                            <input id={`checkbox-${product.id}`} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />
-                                            <label htmlFor={`checkbox-${product.id}`} className="sr-only">checkbox</label>
+                                            <input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />
+                                            <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
                                         </div>
-                                    </td>
-                                    <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{product.id}</td>
-                                    <td className="px-6 py-4">{product.name}</td>
-                                    <td className="px-6 py-4">{product.price}</td>
-                                    <td className="px-6 py-4 flex space-x-4">
-                                        <button
-                                            onClick={() => handleEdit(product)}
-                                            className="text-blue-500 hover:text-blue-700"
-                                        >
-                                            <BiEdit size={18} />
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(product)}
-                                            className="text-red-500 hover:text-red-700"
-                                        >
-                                            <BiTrash size={18} />
-                                        </button>
-                                    </td>
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">ID</th>
+                                    <th scope="col" className="px-6 py-3">Name</th>
+                                    <th scope="col" className="px-6 py-3">Price</th>
+                                    <th scope="col" className="px-6 py-3">Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {
+                                    currentItems.map((product) => (
+                                        <tr key={product.id}>
+                                            <td className="w-4 p-4">
+                                                <div className="flex items-center">
+                                                    <input id={`checkbox-${product.id}`} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" />
+                                                    <label htmlFor={`checkbox-${product.id}`} className="sr-only">checkbox</label>
+                                                </div>
+                                            </td>
+                                            <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{product.id}</td>
+                                            <td className="px-6 py-4">{product.name}</td>
+                                            <td className="px-6 py-4">{product.price}</td>
+                                            <td className="px-6 py-4 flex space-x-4">
+                                                <button
+                                                    onClick={() => handleEdit(product)}
+                                                    className="text-blue-500 hover:text-blue-700"
+                                                >
+                                                    <BiEdit size={18} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(product)}
+                                                    className="text-red-500 hover:text-red-700"
+                                                >
+                                                    <BiTrash size={18} />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    )}
                 </div>
                 <nav aria-label="Page navigation example">
                     <ul className="flex items-center -space-x-px h-8 text-sm">

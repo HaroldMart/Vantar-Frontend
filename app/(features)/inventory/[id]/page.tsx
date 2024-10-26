@@ -1,17 +1,15 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { products } from "@/POSIBLE ELIMINAR/DATABASE";
 import Link from "next/link";
-import { BiChevronRight, BiHome, BiHomeAlt, BiSolidHome } from "react-icons/bi";
+import { BiChevronRight, BiSolidHome } from "react-icons/bi";
 
 
 const productsList = products;
 
-const InventoryDetail = ({ params }) => {
+const InventoryDetail = ({ params }: { params: Record<string, string | string[]> }) => {
     const [inventory, setInventory] = useState(null);
     const [products, setProducts] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
@@ -74,7 +72,6 @@ const InventoryDetail = ({ params }) => {
         }
     };
 
-
     const handleDeleteProduct = async (productId) => {
         const updatedProducts = products.filter((product) => product.id !== productId);
         const updatedInventory = { ...inventory, products: updatedProducts };
@@ -96,6 +93,7 @@ const InventoryDetail = ({ params }) => {
         );
         setFilteredProducts(filtered);
     };
+
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.toLowerCase();
         // const value = e.target.value;
