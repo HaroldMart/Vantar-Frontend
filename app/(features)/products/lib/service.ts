@@ -1,5 +1,5 @@
-import { API } from "../../shared/api";
-import { IGenericService } from "../../shared/interfaces";
+import { API } from "../../shared/api/config";
+import { IGenericService } from "../../shared/generic/interfaces";
 import { Business } from "../../(business)/lib/core";
 import { Product } from "./core";
 

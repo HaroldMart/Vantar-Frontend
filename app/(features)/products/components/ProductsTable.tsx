@@ -9,7 +9,7 @@ interface ProductsTableProps {
 
 const productApiService = new productService(new GenericService(), new GenericService());
 
-import { GenericService } from "@/app/(features)/shared/generic_service";
+import { GenericService } from "@/app/(features)/shared/generic/service";
 
 export const ProductsTable: React.FC<ProductsTableProps> = ({ businessId }) => {
     const [products, setProducts] = useState<Product[]>([]);

@@ -14,4 +14,3 @@ export interface IBusinessService {
   update(id: string, business: Business): Promise<string>;
   delete(id: string): Promise<string>;
 }
-

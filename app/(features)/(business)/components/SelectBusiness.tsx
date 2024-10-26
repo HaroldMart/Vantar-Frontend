@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { businessService } from "../lib/service";
-import { GenericService } from "../../shared/generic_service";
+import { GenericService } from "../../shared/generic/service";
 import { Business } from "../lib/core";
 
 const businessApiService = new businessService(new GenericService());
