@@ -1,22 +1,26 @@
 import { API } from "../../../../shared/api";
 import { IGenericService } from "../../../../shared/interfaces";
+import { Business } from "../../../lib/core";
 import { Product } from "./core";
 
 // THIS IS THE ROUTE AND COMMAND FOR RUN THE FAKE DATABASE: "PS P:\Coding\vantar-frontend\app\(features)\shared> pnpm json-server db.json"
 
 export class productService {
   private _service: IGenericService<Product>;
+  private _business_service: IGenericService<Business>;
 
-  constructor(service: IGenericService<Product>) {
+  constructor(service: IGenericService<Product>, business_service : IGenericService<Business>) {
     this._service = service;
+    this._business_service = business_service;
   }
 
   async getAll(businessId: string): Promise<Product[] | string> {
-    const url = API + businessId +"/products";
-    const data = await this._service.getAllItems(url);
+    const url = `${API}/businesses/${businessId}`
+    const data = await this._business_service.getItem(url)
 
     if (typeof data == "object") {
-      const products: Product[] = data;
+      let business : Business = data;
+      const products: Product[] = business.products;
       return products;
     }
 
