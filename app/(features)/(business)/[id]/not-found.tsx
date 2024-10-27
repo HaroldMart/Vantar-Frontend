@@ -1,5 +1,4 @@
 import "@/app/global.css";
-import Link from "next/link";
 import { BiArrowBack } from "react-icons/bi";
 
 export default function NotFound() {

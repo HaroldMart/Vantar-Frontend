@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BiChevronDown, BiEdit, BiFilter, BiSearch, BiTrash } from "react-icons/bi";
 import { productService } from "../lib/service";
-import { Product } from "../lib/core";
+import { Product } from "../lib/model";
 
 interface ProductsTableProps {
     businessId: string;

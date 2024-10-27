@@ -1,85 +1,76 @@
+import { Product } from "../../products/lib/model";
 import { API } from "../../shared/api/config";
-import { IGenericService } from "../../shared/generic/interfaces";
-import { Business } from "./core";
+import { GenericService } from "../../shared/generic/service";
+import { Business } from "./model";
 
-// THIS IS THE ROUTE AND COMMAND FOR RUN THE FAKE DATABASE: "PS P:\Coding\vantar-frontend\app\(features)\shared> pnpm json-server db.json"
+export class BusinessService {
+  private businessService;
 
-export class businessService {
-  private _service: IGenericService<Business>;
-
-  constructor(service: IGenericService<Business>) {
-    this._service = service;
+  constructor() {
+    this.businessService = new GenericService<Business>
   }
 
-  async getAllTest(id: string): Promise<Business[] | string> {
-    const url = API + `businesses/${id}`;
-    const data = await this._service.getAllItems(url);
-
-    if (typeof data == "object") {
-      const businesses: Business[] = data;
-      return businesses;
+  async getAllBusinesses(): Promise<Business[] | string> {
+    try {
+      const businesses = await this.businessService.getAllItems(`${API}/businesses`);
+      return businesses.length ? businesses : "No se encontraron negocios";
+    } catch (error) {
+      console.error("Error al obtener los negocios:", error);
+      return "Hubo un error al traer los negocios";
     }
-
-    return "Hubo un error al traer los negocios";
   }
 
-  async getAll(): Promise<Business[] | string> {
-    const url = API + "businesses";
-    const data = await this._service.getAllItems(url);
-
-    if (typeof data == "object") {
-      const businesses: Business[] = data;
-      return businesses;
+  async getBusiness(businessId: string): Promise<Business | string> {
+    try {
+      const business = await this.businessService.getItem(`${API}/businesses/${businessId}`);
+      return business ?? "No se encontró el negocio";
+    } catch (error) {
+      console.error("Error al obtener el negocio:", error);
+      return "Hubo un error al traer el negocio";
     }
-
-    return "Hubo un error al traer los negocios";
   }
 
-  async get(id: string): Promise<Business | string> {
-    const url = API + `businesses/${id}`;
-    const data = await this._service.getItem(url);
-
-    if (typeof data == "object") {
-      const business: Business = data;
-      return business;
+  async createBusiness(business: Business): Promise<Business | string> {
+    try {
+      const newBusiness = await this.businessService.createItem(`${API}/businesses`, business);
+      return newBusiness ?? "No se pudo crear el negocio";
+    } catch (error) {
+      console.error("Error al crear el negocio:", error);
+      return "Hubo un error al crear el negocio";
     }
-
-    return "Hubo un error al traer el negocio";
   }
 
-  async create(business: Business): Promise<Business | string> {
-    const url = API + "businesses";
-    const data = await this._service.createItem(url, business);
-
-    if (typeof data == "object") {
-      const business: Business = data;
-      return business;
+  async updateBusiness(businessId: string, business: Business): Promise<string> {
+    try {
+      const updated = await this.businessService.updateItem(`${API}/businesses/${businessId}`, business);
+      return updated ? "El negocio fue actualizado" : "No se pudo actualizar el negocio";
+    } catch (error) {
+      console.error("Error al actualizar el negocio:", error);
+      return "Hubo un error al actualizar el negocio";
     }
-
-    return "Hubo un error al crear el negocio";
   }
 
-  async update(id: string, business: Business): Promise<string> {
-    const url = API + `businesses/${id}`;
-    const data = await this._service.updateItem(url, business);
-
-    if (data == true) {
-      console.log("updated");
-      return "El negocio fue actualizado";
+  async deleteBusiness(businessId: string): Promise<string> {
+    try {
+      const deleted = await this.businessService.deleteItem(`${API}/businesses/${businessId}`);
+      return deleted ? "El negocio fue eliminado" : "No se pudo eliminar el negocio";
+    } catch (error) {
+      console.error("Error al eliminar el negocio:", error);
+      return "Hubo un error al eliminar el negocio";
     }
-
-    return "Hubo un error al actualizar el negocio";
   }
 
-  async delete(id: string): Promise<string> {
-    const url = API + `businesses/${id}`;
-    const data = await this._service.deleteItem(url);
-
-    if (data == true) {
-      console.log("deleted");
-      return "El negocio fue eliminado";
+  // Función para devolver solo los productos de un negocio específico
+  async getBusinessProducts(businessId: string): Promise<Product[] | string> {
+    try {
+      const business = await this.getBusiness(businessId);
+      if (typeof business === "object") {
+        return business.products.length ? business.products : "El negocio no tiene productos";
+      }
+      return business; // Retorna el mensaje de error desde getBusiness si no es objeto
+    } catch (error) {
+      console.error("Error al obtener los productos del negocio:", error);
+      return "Hubo un error al obtener los productos del negocio";
     }
-
-    return "Hubo un error al eliminar el negocio";
   }
 }
