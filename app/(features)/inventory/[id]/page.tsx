@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { products } from "@/POSIBLE ELIMINAR/DATABASE";
 import Link from "next/link";
 import { BiChevronRight, BiSolidHome } from "react-icons/bi";
+import { ProductService } from "../../products/lib/service";
 
+// hay que arreglar esta pagina
 
-const productsList = products;
+// const productsList = new ProductService.getAllProducts();
 
 const InventoryDetail = ({ params }: { params: Record<string, string | string[]> }) => {
     const [inventory, setInventory] = useState(null);

@@ -29,7 +29,8 @@ export default function SelectBusiness() {
 
   return (
     <div className="flex flex-col flex-1 gap-3 justify-center items-center h-screen bg-gray-100">
-      {error && <p className="text-red-500">{error}</p>} {/* Muestra el mensaje de error */}
+      {error && <p className="text-red-500">{error}</p>}{" "}
+      {/* Muestra el mensaje de error */}
       <ul>
         {businesses.map((business) => (
           <li key={business.id}>

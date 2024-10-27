@@ -47,7 +47,7 @@ export class ProductService implements IProductService {
     if (!created_product) {
       throw new Error("No se puedo crear el producto");
     }
-    return product;
+    return created_product;
   }
 
   async updateProduct(businessId: string, productId: string, product: Product): Promise<void> {

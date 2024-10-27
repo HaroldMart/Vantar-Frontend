@@ -79,10 +79,10 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({ businessId }) => {
 
   const addProduct = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newProductData : Product = {
+    const newProductData: Product = {
       name: newProduct.name,
       price: parseFloat(newProduct.price),
-      business_id: businessId
+      business_id: businessId,
     };
 
     try {
