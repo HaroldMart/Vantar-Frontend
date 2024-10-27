@@ -1,26 +1,29 @@
 "use client";
 
-import { BiSolidBusiness, BiSolidHome } from "react-icons/bi";
+import { BiSolidBusiness } from "react-icons/bi";
 import Link from "next/link";
 
-const BusinessDetail = ({ params }: { params: Record<string, string | string[]> }) => {
+const BusinessDetail = ({
+  params,
+}: {
+  params: Record<string, string | string[]>;
+}) => {
+  const { id } = params;
 
-    const { id } = params;
-
-    return (
-        <>
-            <div className="flex flex-col flex-1 gap-3 justify-center items-center h-screen bg-gray-100">
-                <div className="flex justify-center items-center p-6 bg-blue-100 rounded-full">
-                    <BiSolidBusiness size={36} className="fill-blue-700" />
-                </div>
-                <h1 className="text-4xl font-semibold text-[#795BF9]">
-                    Negocio - {id}
-                </h1>
-                <Link href={`${id}/products`}>Ir a productos</Link>
-                <Link href={`${id}/inventory`}>Ir a inventarios</Link>
-            </div>
-        </>
-    );
-}
+  return (
+    <>
+      <div className="flex flex-col flex-1 gap-3 justify-center items-center h-screen bg-gray-100">
+        <div className="flex justify-center items-center p-6 bg-blue-100 rounded-full">
+          <BiSolidBusiness size={36} className="fill-blue-700" />
+        </div>
+        <h1 className="text-4xl font-semibold text-[#795BF9]">
+          Negocio - {id}
+        </h1>
+        <Link href={`${id}/products`}>Ir a productos</Link>
+        <Link href={`${id}/inventory`}>Ir a inventarios</Link>
+      </div>
+    </>
+  );
+};
 
 export default BusinessDetail;

@@ -16,8 +16,8 @@ export class GenericService<T> implements IGenericService<T> {
       const { data } = await axios.get<T[]>(url);
       return data;
     } catch (error) {
-      console.error(`Error during GET request at ${url}`, error);
-      return [];
+      this.handleError(error, 'GET', url);
+      return []; // Retorna un array vacío en caso de error
     }
   }
 
@@ -26,8 +26,8 @@ export class GenericService<T> implements IGenericService<T> {
       const { data } = await axios.get<T>(url);
       return data;
     } catch (error) {
-      console.error(`Error during GET request at ${url}`, error);
-      return null;
+      this.handleError(error, 'GET', url);
+      return null; // Retorna null en caso de error
     }
   }
 
@@ -36,8 +36,8 @@ export class GenericService<T> implements IGenericService<T> {
       const { data } = await axios.post<T>(url, item);
       return data;
     } catch (error) {
-      console.error(`Error during POST request at ${url}`, error);
-      return null;
+      this.handleError(error, 'POST', url);
+      return null; // Retorna null en caso de error
     }
   }
 
@@ -46,8 +46,8 @@ export class GenericService<T> implements IGenericService<T> {
       await axios.put(url, item);
       return true;
     } catch (error) {
-      console.error(`Error during PUT request at ${url}`, error);
-      return false;
+      this.handleError(error, 'PUT', url);
+      return false; // Retorna false en caso de error
     }
   }
 
@@ -56,8 +56,17 @@ export class GenericService<T> implements IGenericService<T> {
       await axios.delete(url);
       return true;
     } catch (error) {
-      console.error(`Error during DELETE request at ${url}`, error);
-      return false;
+      this.handleError(error, 'DELETE', url);
+      return false; // Retorna false en caso de error
+    }
+  }
+
+  private handleError(error: unknown, method: string, url: string) {
+    // Manejo de errores centralizado
+    if (axios.isAxiosError(error)) {
+      console.error(`Error during ${method} request at ${url}: ${error.message}`);
+    } else {
+      console.error(`Unexpected error during ${method} request at ${url}:`, error);
     }
   }
 }
