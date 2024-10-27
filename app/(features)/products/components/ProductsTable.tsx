@@ -79,9 +79,10 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({ businessId }) => {
 
   const addProduct = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newProductData = {
+    const newProductData : Product = {
       name: newProduct.name,
       price: parseFloat(newProduct.price),
+      business_id: businessId
     };
 
     try {
@@ -89,7 +90,7 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({ businessId }) => {
         businessId,
         newProductData
       );
-      if (typeof createdProduct === "string") {
+      if (!createdProduct) {
         console.error(createdProduct); // Mostrar error si lo hubo
       } else {
         setProducts([...products, createdProduct]); // Actualizamos la lista de productos

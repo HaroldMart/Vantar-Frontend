@@ -2,46 +2,51 @@
   "businesses": [
     {
       "id": "4376",
-      "name": "Colmado papitin",
-      "inventories": [
-        {
-          "id": "3evwkno6q",
-          "name": "Inventario octubre 2",
-          "products": []
-        },
-        {
-          "id": "xifvpu8at",
-          "name": "Inventario octubre 3",
-          "products": [
-            {
-              "id": "6470",
-              "name": "Azucar 1Lbs",
-              "price": 40
-            }
-          ]
-        }
-      ],
+      "name": "Colmado papitin"
+    }
+  ],
+  "products": [
+    {
+      "id": "926f",
+      "name": "Chinola ",
+      "price": 25,
+      "business_id": "4376"
+    },
+    {
+      "id": "2815",
+      "name": "Habichuela Roja 1lbs",
+      "price": 75,
+      "business_id": "4376"
+    },
+    {
+      "id": "946e",
+      "name": "Guandules secos 1lbs",
+      "price": 85,
+      "business_id": "4376"
+    },
+    {
+      "id": "3d44",
+      "name": "Caña",
+      "price": 100,
+      "business_id": "4376"
+    },
+    {
+      "id": "6470",
+      "name": "Azucar 1Lbs",
+      "price": 40,
+      "business_id": "4376"
+    }
+  ],
+  "inventories": [
+    {
+      "id": "3evwkno6q",
+      "name": "Inventario octubre 2",
+      "products": []
+    },
+    {
+      "id": "xifvpu8at",
+      "name": "Inventario octubre 3",
       "products": [
-        {
-          "id": "926f",
-          "name": "Chinola ",
-          "price": 25
-        },
-        {
-          "id": "2815",
-          "name": "Habichuela Roja 1lbs",
-          "price": 75
-        },
-        {
-          "id": "946e",
-          "name": "Guandules secos 1lbs",
-          "price": 85
-        },
-        {
-          "id": "3d44",
-          "name": "Caña",
-          "price": 100
-        },
         {
           "id": "6470",
           "name": "Azucar 1Lbs",

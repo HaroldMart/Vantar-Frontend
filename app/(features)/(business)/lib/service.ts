@@ -2,7 +2,15 @@ import { Business } from "../../(business)/lib/model";
 import { API } from "../../shared/api/config";
 import { GenericService } from "../../shared/generic/service";
 
-export class BusinessService {
+export interface IBusinessService {
+  getAllBusinesses(): Promise<Business[]>;
+  getBusiness(businessId: string): Promise<Business>;
+  createBusiness(business: Business): Promise<Business>;
+  updateBusiness(businessId: string, business: Business): Promise<void>;
+  deleteBusiness(businessId: string): Promise<void>;
+}
+
+export class BusinessService implements IBusinessService {
   private businessService: GenericService<Business>;
 
   constructor() {
