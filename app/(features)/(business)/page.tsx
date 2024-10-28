@@ -1,7 +1,7 @@
 'use client'
 
 import { BiSolidHome } from "react-icons/bi";
-import ListBusiness from "./components/listBusiness";
+import ListBusiness from "./components/business-list";
 
 export default function Home() {
   return (

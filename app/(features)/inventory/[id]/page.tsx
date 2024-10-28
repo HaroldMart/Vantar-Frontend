@@ -45,31 +45,28 @@ const InventoryDetail = ({ params }: { params: Record<string, string | string[]>
         fetchAllProducts();
     }, [id]);
 
-    const handleAddProduct = async () => {
+    const handleAddProduct = async (product) => {
         // Verificar si el producto ya está en el inventario
-        const existingProduct = products.find((product) => product.id === newProductId);
+        const existingProduct = products.find((p) => p.id === product.id);
         if (existingProduct) {
             alert("Este producto ya está en el inventario.");
             return;
         }
 
-        // Obtener el producto de la lista general de productos
-        const productToAdd = allProducts.find((product) => product.id === newProductId);
+        const updatedInventory = {
+            ...inventory,
+            products: [...products, product],
+        };
 
-        if (productToAdd) {
-            const updatedInventory = {
-                ...inventory,
-                products: [...products, productToAdd],
-            };
-
-            // Actualizar inventario en db.json
-            try {
-                await axios.put(`http://localhost:5000/inventories/${id}`, updatedInventory);
-                setProducts([...products, productToAdd]);
-                setNewProductId("");
-            } catch (error) {
-                console.error("Error al añadir producto al inventario", error);
-            }
+        // Actualizar inventario en db.json
+        try {
+            await axios.put(`http://localhost:5000/inventories/${id}`, updatedInventory);
+            setProducts([...products, product]);
+            setNewProductId("");
+            setSearchTerm("");
+            setFilteredProducts([]);
+        } catch (error) {
+            console.error("Error al añadir producto al inventario", error);
         }
     };
 
@@ -97,14 +94,15 @@ const InventoryDetail = ({ params }: { params: Record<string, string | string[]>
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.toLowerCase();
-        // const value = e.target.value;
-
         setSearchTerm(value);
 
         if (value) {
+            // Filtra los productos, excluyendo los ya en el inventario
             setFilteredProducts(
-                productsList.filter((product) =>
-                    product.name.toLowerCase().includes(value.toLowerCase())
+                allProducts.filter(
+                    (product) =>
+                        product.name.toLowerCase().includes(value) &&
+                        !products.some((p) => p.id === product.id)
                 )
             );
         } else {
@@ -114,79 +112,73 @@ const InventoryDetail = ({ params }: { params: Record<string, string | string[]>
 
     return (
         <>
-            <div className="container mx-auto px-4 pt-8 h-full">
+            <div className="container mx-auto px-4 pt-8 h-full text-gray-700">
                 <div className="h-full">
-                    <div className="">
-                        <nav className="flex px-5 py-3 mb-4 text-gray-700 border border-gray-200 rounded-lg bg-gray-50" aria-label="Breadcrumb"> {/* dark:bg-gray-800 dark:border-gray-700 */}
-                            {/* Breadcrumb Content */}
-                            <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-                                <li className="inline-flex items-center">
-                                    <Link href={"/"} className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-all duration-200 hover:scale-105"> {/* dark:text-gray-400 dark:hover:text-white */}
-                                        <BiSolidHome size={18} className="mr-1" />
-                                        Inicio
-                                    </Link>
-                                </li>
-                                <BiChevronRight />
-                                <li>
-                                    <Link href={"/inventory"} className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-all duration-200 hover:scale-105">
-                                        Inventario
-                                    </Link>
-                                </li>
-                                <BiChevronRight />
-                                <li>
-                                    <div className="flex items-center">
-                                        <span className="text-sm font-medium text-gray-500"> {/* dark:text-gray-400 dark:hover:text-white */}
-                                            {inventory?.name}
-                                        </span>
-                                    </div>
-                                </li>
-                            </ol>
-                        </nav>
-                        <h1 className="flex gap-2 items-center text-4xl font-medium text-gray-700 mb-6">
-                            {inventory?.name}
-                        </h1>
-                    </div>
+                    <nav className="flex px-5 py-3 mb-6 text-gray-700 border border-gray-200 rounded-lg bg-gray-50" aria-label="Breadcrumb">
+                        <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                            <li className="inline-flex items-center">
+                                <Link href={"/"} className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-all duration-200 hover:scale-105">
+                                    <BiSolidHome size={18} className="mr-1" />
+                                    Inicio
+                                </Link>
+                            </li>
+                            <BiChevronRight />
+                            <li>
+                                <Link href={"/inventory"} className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-all duration-200 hover:scale-105">
+                                    Inventario
+                                </Link>
+                            </li>
+                            <BiChevronRight />
+                            <li>
+                                <div className="flex items-center">
+                                    <span className="text-sm font-medium text-gray-500">{inventory?.name}</span>
+                                </div>
+                            </li>
+                        </ol>
+                    </nav>
 
-                    <div>
+                    <h1 className="text-3xl font-bold mb-4 text-gray-800">{inventory?.name}</h1>
+
+                    <div className="mb-4">
                         <input
                             type="text"
                             placeholder="Buscar producto"
                             value={searchTerm}
                             onChange={handleSearchChange}
+                            className="w-full p-3 mb-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
-                        <ul>
-                            {filteredProducts.map((product, index) => (
-                                <li key={index} onClick={() => handleAddProduct(product)}>
-                                    {product.name} - {product.price}
-                                </li>
-                            ))}
-                        </ul>
 
-                        <h2>Productos en el inventario:</h2>
-                        <ul>
-                            {(searchTerm ? filteredProducts : products).map((product) => (
-                                <li key={product.id}>
-                                    {product.name} - ${product.price}
-                                    <button onClick={() => handleDeleteProduct(product.id)}>Eliminar</button>
-                                </li>
-                            ))}
-                        </ul>
-
-                        <h2>Añadir nuevo producto</h2>
-                        <select
-                            title="Seleccioanar Producto"
-                            value={newProductId}
-                            onChange={(e) => setNewProductId(e.target.value)}
-                        >
-                            <option value="">Selecciona un producto</option>
-                            {allProducts.map((product) => (
-                                <option key={product.id} value={product.id}>
-                                    {product.name} - ${product.price}
-                                </option>
-                            ))}
-                        </select>
-                        <button onClick={handleAddProduct}>Añadir producto</button>
+                        {filteredProducts.length > 0 && (
+                            <ul className="absolute w-full bg-white border border-gray-300 shadow-lg rounded-md mt-2 z-10 max-h-60 overflow-y-auto">
+                                {filteredProducts.map((product) => (
+                                    <li
+                                        key={product.id}
+                                        onClick={() => handleAddProduct(product)}
+                                        className="px-4 py-2 cursor-pointer hover:bg-blue-100 flex justify-between items-center"
+                                    >
+                                        <span>{product.name}</span>
+                                        <span className="text-gray-500">${product.price}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
+
+                    <h2 className="text-xl font-semibold mb-2">Productos en el inventario:</h2>
+                    <ul className="space-y-2">
+                        {products.map((product) => (
+                            <li key={product.id} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-md">
+                                <span>{product.name}</span>
+                                <span className="text-gray-500">${product.price}</span>
+                                <button
+                                    onClick={() => handleDeleteProduct(product.id)}
+                                    className="px-3 py-1 text-red-600 border border-red-300 rounded-md hover:bg-red-100 transition"
+                                >
+                                    Eliminar
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
         </>

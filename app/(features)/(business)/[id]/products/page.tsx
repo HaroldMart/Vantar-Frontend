@@ -27,7 +27,7 @@ export default function Product({
               <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                 <li className="inline-flex items-center">
                   <Link
-                    href={"/"}
+                    href={`/${id}`}
                     className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-all duration-200 hover:scale-105"
                   >
                     {" "}
@@ -48,8 +48,6 @@ export default function Product({
                   <div className="flex items-center">
                     <BiChevronRight />
                     <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2">
-                      {" "}
-                      {/* dark:text-gray-400 dark:hover:text-white */}
                       Products
                     </span>
                   </div>

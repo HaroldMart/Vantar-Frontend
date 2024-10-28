@@ -7,24 +7,6 @@
   ],
   "products": [
     {
-      "id": "926f",
-      "name": "Chinola ",
-      "price": 25,
-      "business_id": "4376"
-    },
-    {
-      "id": "2815",
-      "name": "Habichuela Roja 1lbs",
-      "price": 75,
-      "business_id": "4376"
-    },
-    {
-      "id": "946e",
-      "name": "Guandules secos 1lbs",
-      "price": 85,
-      "business_id": "4376"
-    },
-    {
       "id": "3d44",
       "name": "Caña",
       "price": 100,
@@ -41,24 +23,45 @@
       "name": "izaeele",
       "price": 44,
       "business_id": "4376"
+    },
+    {
+      "id": "63c0",
+      "name": "Aguacate",
+      "price": 12,
+      "business_id": "4376"
+    },
+    {
+      "id": "a6dd",
+      "name": "Cereza",
+      "price": 432,
+      "business_id": "4376"
     }
   ],
   "inventories": [
     {
-      "id": "3evwkno6q",
-      "name": "Inventario octubre 2",
-      "products": []
-    },
-    {
-      "id": "xifvpu8at",
-      "name": "Inventario octubre 3",
+      "id": "7144",
+      "business_id": "4376",
+      "name": "Nuevo nombre",
       "products": [
+        {
+          "id": "3d44",
+          "name": "Caña",
+          "price": 100,
+          "business_id": "4376"
+        },
         {
           "id": "6470",
           "name": "Azucar 1Lbs",
-          "price": 40
+          "price": 40,
+          "business_id": "4376"
         }
       ]
+    },
+    {
+      "id": "6415",
+      "business_id": "4376",
+      "name": "Inventario octubre",
+      "products": []
     }
   ]
 }
