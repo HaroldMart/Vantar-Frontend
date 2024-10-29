@@ -3,12 +3,22 @@
     {
       "id": "4376",
       "name": "Colmado papitin"
+    },
+    {
+      "id": "4000",
+      "name": "Tienda de cafe"
     }
   ],
   "products": [
     {
       "id": "3d44",
       "name": "Caña",
+      "price": 100,
+      "business_id": "4376"
+    },
+    {
+      "id": "4333",
+      "name": "Poronga",
       "price": 100,
       "business_id": "4376"
     },
@@ -35,33 +45,83 @@
       "name": "Cereza",
       "price": 432,
       "business_id": "4376"
+    },
+    {
+      "id": "7631",
+      "name": "Cocoro",
+      "price": 1424,
+      "business_id": "4376"
+    },
+    {
+      "id": "09a7",
+      "name": "Cafe sin cafe",
+      "price": 10,
+      "business_id": "4000"
+    },
+    {
+      "id": "53a2",
+      "name": "Cafeina pura",
+      "price": 100,
+      "business_id": "4000"
+    },
+    {
+      "id": "7656",
+      "name": "Agua",
+      "price": 1,
+      "business_id": "4000"
     }
   ],
   "inventories": [
     {
-      "id": "7144",
+      "id": "48mjfaz9e",
       "business_id": "4376",
-      "name": "Nuevo nombre",
+      "name": "Inventario octubre",
       "products": [
-        {
-          "id": "3d44",
-          "name": "Caña",
-          "price": 100,
-          "business_id": "4376"
-        },
         {
           "id": "6470",
           "name": "Azucar 1Lbs",
           "price": 40,
           "business_id": "4376"
+        },
+        {
+          "id": "af62",
+          "name": "izaeele",
+          "price": 44,
+          "business_id": "4376"
         }
       ]
     },
     {
-      "id": "6415",
+      "id": "rl28m1l8d",
       "business_id": "4376",
+      "name": "Inventario 2/16/24",
+      "products": [
+        {
+          "id": "4333",
+          "name": "Poronga",
+          "price": 100,
+          "business_id": "4376"
+        },
+        {
+          "id": "7631",
+          "name": "Cocoro",
+          "price": 1424,
+          "business_id": "4376"
+        }
+      ]
+    },
+    {
+      "id": "ujc7ichuo",
+      "business_id": "4000",
       "name": "Inventario octubre",
-      "products": []
+      "products": [
+        {
+          "id": "09a7",
+          "name": "Cafe sin cafe",
+          "price": 10,
+          "business_id": "4000"
+        }
+      ]
     }
   ]
 }

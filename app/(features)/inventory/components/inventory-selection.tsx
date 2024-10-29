@@ -18,10 +18,9 @@ const InventorySelection: React.FC<InventorySelectionProps> = ({ businessId }) =
     const [currentMonth, setCurrentMonth] = useState<string>("");
     const [newInventoryName, setNewInventoryName] = useState<string>("");
     const [editInventory, setEditInventory] = useState<Inventory | null>(null);
-    const [deleteInventoryId, setDeleteInventoryId] = useState<number | null>(null);
+    const [deleteInventoryId, setDeleteInventoryId] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-    const API_URL = "http://localhost:5000/inventories";
 
     const fetchInventories = async () => {
         try {
@@ -50,7 +49,7 @@ const InventorySelection: React.FC<InventorySelectionProps> = ({ businessId }) =
         );
         const inventoryNumber = existingInventoriesForMonth.length + 1;
         const generateRandomId = () => {
-            return Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+            return Math.random().toString(36).substr(2, 9); // Genera un string alfanumérico de 9 caracteres
         };
 
         // Luego úsalo en tu código:
@@ -76,11 +75,11 @@ const InventorySelection: React.FC<InventorySelectionProps> = ({ businessId }) =
         }
     }
 
-    const deleteInventory = async (id: number) => {
+    const deleteInventory = async (id: string) => {
         try {
-            await inventoryApiService.deleteInventory(businessId, String(id));
+            await inventoryApiService.deleteInventory(businessId, id);
             setInventories(
-                inventories.filter((inv) => inv.id !== String(id))
+                inventories.filter((inv) => inv.id !== id)
             );
 
             setDeleteInventoryId(null);
@@ -90,7 +89,6 @@ const InventorySelection: React.FC<InventorySelectionProps> = ({ businessId }) =
         }
     };
 
-    // Actualizar el nombre de un inventario
     const updateInventory = async () => {
         if (!editInventory) return;
 
@@ -204,7 +202,7 @@ const InventorySelection: React.FC<InventorySelectionProps> = ({ businessId }) =
                                                     Editar
                                                 </button>
                                                 <button
-                                                    onClick={() => setDeleteInventoryId(Number(inv.id))}
+                                                    onClick={() => setDeleteInventoryId(inv.id)}
                                                     className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700"
                                                 >
                                                     Eliminar
@@ -258,7 +256,7 @@ const InventorySelection: React.FC<InventorySelectionProps> = ({ businessId }) =
                                         </h3>
                                         <div className="flex justify-end gap-2">
                                             <button
-                                                onClick={() => deleteInventory(Number(deleteInventoryId))}
+                                                onClick={() => deleteInventory(deleteInventoryId)}
                                                 className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
                                             >
                                                 Eliminar
