@@ -69,6 +69,18 @@
       "name": "Agua",
       "price": 1,
       "business_id": "4000"
+    },
+    {
+      "id": "0bd0",
+      "name": "Arete",
+      "price": 122,
+      "business_id": "6ead"
+    },
+    {
+      "id": "509f",
+      "name": "Collar de perlas",
+      "price": 10000,
+      "business_id": "6ead"
     }
   ],
   "inventories": [
@@ -116,10 +128,10 @@
       "name": "Inventario octubre",
       "products": [
         {
-          "id": "09a7",
-          "name": "Cafe sin cafe",
-          "price": 10,
-          "business_id": "4000"
+          "id": "509f",
+          "name": "Collar de perlas",
+          "price": 10000,
+          "business_id": "6ead"
         }
       ]
     }

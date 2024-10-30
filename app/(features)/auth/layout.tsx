@@ -5,6 +5,7 @@ export default function Layout({
 }>) {
     return (
         <div>
+            Modulo de autenticación
             {children}
         </div>
     )

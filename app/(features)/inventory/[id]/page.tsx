@@ -45,7 +45,7 @@ const InventoryDetail = ({ params }: { params: Record<string, string | string[]>
         fetchAllProducts();
     }, [id]);
 
-    const handleAddProduct = async (product) => {
+    const handleAddProduct = async (product : any) => {
         // Verificar si el producto ya está en el inventario
         const existingProduct = products.find((p) => p.id === product.id);
         if (existingProduct) {
@@ -96,7 +96,7 @@ const InventoryDetail = ({ params }: { params: Record<string, string | string[]>
         const value = e.target.value.toLowerCase();
         setSearchTerm(value);
 
-        if (value) {
+        if (value && id) {
             // Filtra los productos, excluyendo los ya en el inventario
             setFilteredProducts(
                 allProducts.filter(

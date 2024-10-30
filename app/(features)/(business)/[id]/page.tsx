@@ -14,6 +14,9 @@ const BusinessDetail = ({
         <>
             <div className="flex flex-col flex-1 gap-3 justify-center items-center h-screen bg-gray-100">
                 <Link href={"/"}>Regresar a la seleccion</Link>
+                <p className="text-red-600 font-bold">
+                    Only loggen users can view this page
+                </p>
                 <div className="flex justify-center items-center p-6 bg-blue-100 rounded-full">
                     <BiSolidBusiness size={36} className="fill-blue-700" />
                 </div>
