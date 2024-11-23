@@ -1,4 +1,4 @@
-import { API } from "../../shared/api";
+import { API } from "../../shared/constants";
 import { IGenericService } from "../../shared/interfaces";
 import { Product } from "./core";
 

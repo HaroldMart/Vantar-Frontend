@@ -1,12 +1,16 @@
-import {
-  BiLogoGoogle,
-  BiSolidChevronLeft,
-  BiSolidChevronRight,
-} from "react-icons/bi";
+'use client'
+
+import { BiSolidChevronLeft, BiSolidChevronRight } from "react-icons/bi";
 import Image from "next/image";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+
+import { login } from "@auth/lib/auth-actions";
+import { LoginCredentials } from "@auth/lib/interfaces";
 
 export default function Page() {
+  const { handleSubmit, register } = useForm<LoginCredentials>();
+
   return (
     <section className="flex h-full items-start bg-white" id="login">
       <div className="flex flex-col justify-center items-center flex-1 h-full p-8">
@@ -20,18 +24,23 @@ export default function Page() {
               </p>
             </div>
           </div>
-          <form className="flex flex-col gap-4 w-full">
+          <form onSubmit={handleSubmit(login)} className="flex flex-col gap-4 w-full">
             <div className="flex flex-col gap-4 w-full">
               <input
                 className="px-4 py-2 border rounded"
                 placeholder="Enter your email"
                 aria-label="Email"
+                {...register('email', {
+                  required: true,
+                  
+                })}
               />
               <input
                 className="px-4 py-2 border rounded"
                 placeholder="•••••••••••"
                 aria-label="Password"
                 type="password"
+                {...register('password')}
               />
             </div>
             <div className="flex justify-between items-center gap-2 w-full">
