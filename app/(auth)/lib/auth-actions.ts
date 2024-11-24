@@ -1,7 +1,7 @@
 'use server'
 
 import axios from 'axios';
-import { redirect } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 
 import { API_URL } from "@shared/constants";
@@ -9,12 +9,12 @@ import { LoginCredentials, Tokens, ResetPassword, SingupCredentials } from '@aut
 
 const url: string = API_URL + 'auth';
 
-export async function login(credentials: LoginCredentials): Promise<any> {
+export async function login(credentials: LoginCredentials) {
     try {
         const res = await axios.post<Tokens>(url + '/login', credentials);
         cookies().set('access_token', res.data.access_token);
         cookies().set('refresh_token', res.data.refresh_token);
-        redirect('/');
+        return { success: true }
     } catch (err: any) {
         return {
             message: err.response.data.message,
@@ -25,18 +25,20 @@ export async function login(credentials: LoginCredentials): Promise<any> {
 
 export async function singUp(credentials: SingupCredentials) {
     try {
-        await axios.post<string>(API_URL + '/users/create', credentials);
-        await login(credentials);
-    } catch (err) {
-        console.error('Register error:', err);
-        throw new Error('Failed to register. Please check your credentials.');
+        await axios.post<string>(API_URL + 'users', credentials);
+        return login(credentials);
+    } catch (err: any) {
+        return {
+            message: err.response.data.message,
+            status: err.response.data.statusCode
+        }
     }
 }
 
 export async function refresh(): Promise<void> {
     const token: string = cookies().get('refresh-token')?.value ?? '';
 
-    if (!token) redirect('/');
+    if (!token) permanentRedirect('/login');
 
     try {
         const res = await axios.post<Tokens>(url + '/refresh', token, {
@@ -67,13 +69,15 @@ export async function logout(): Promise<void> {
     }
 }
 
-export async function forgotPassword(email: string): Promise<string> {
+export async function forgotPassword(email: string) {
     try {
         const res = await axios.post<{ message: string }>(url + '/forgot', email);
-        return res.data.message;
-    } catch (err) {
-        console.error('Error:', err);
-        throw new Error('Failed. Please check your credentials.');
+        return res.data;
+    } catch (err: any) {
+        return {
+            message: err.response.data.message,
+            status: err.response.data.statusCode
+        }
     }
 }
 

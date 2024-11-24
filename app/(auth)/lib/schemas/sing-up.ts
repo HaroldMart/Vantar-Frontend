@@ -1,6 +1,8 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-export const loginSchema = z.object({
+export const singUpSchema = z.object({
+    name: z.string()
+        .max(30, 'EL nombre es demasiado largo, maximo 30 caractères'),
     email: z.string()
         .email('e-mail invalido')
         .max(60, 'e-mail demasiado largo'),
