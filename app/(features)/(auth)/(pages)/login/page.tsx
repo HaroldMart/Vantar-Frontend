@@ -1,85 +1,87 @@
-'use client'
+"use client";
 
 import { BiSolidChevronLeft, BiSolidChevronRight } from "react-icons/bi";
 import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from 'sonner';
 
 import { login } from "@auth/lib/auth-actions";
 import { LoginCredentials } from "@auth/lib/interfaces";
+import { Button, Icon, Input, Toaster } from "@shared/_components";
+import { loginSchema } from "@auth/lib/schemas";
+import { useState } from "react";
 
 export default function Page() {
-  const { handleSubmit, register } = useForm<LoginCredentials>();
+  const [ isLoading, setLoading ] = useState<boolean>(false);
+  const { handleSubmit, register, formState: { errors } } = useForm<LoginCredentials>({
+    resolver: zodResolver(loginSchema)
+  });
+  const onSubmit = handleSubmit(async (credentials) => {
+    setLoading(true);
+    const res = await login(credentials);
+    setLoading(false);
+    toast(`${res.message[0]}`);
+  });
 
   return (
     <section className="flex h-full items-start bg-white" id="login">
+      <Toaster/>
       <div className="flex flex-col justify-center items-center flex-1 h-full p-8">
-        <div className="flex flex-col justify-center items-center w-full max-w-md gap-4">
-          <div className="flex flex-col justify-center items-center gap-4 w-full">
-            <Image src="/images/logo.png" width={48} height={48} alt="Logo" />
-            <div className="flex flex-col justify-center items-center gap-3 w-full text-center">
-              <h2 className="text-3xl font-semibold text-gray-900">Login</h2>
-              <p className="text-lg text-gray-500">
-                Welcome back! Please enter your details.
-              </p>
-            </div>
+        <div className="flex flex-col justify-center items-center gap-4 p-10 w-full">
+          <Image src="/images/logo.png" width={48} height={48} alt="Logo" />
+          <div className="flex flex-col justify-center items-center gap-3 w-full text-center">
+            <h2 className="text-3xl font-semibold text-gray-900">Login</h2>
+            <p className="text-lg text-gray-500">
+              Bienvenido, ingresa tus credenciales.
+            </p>
           </div>
-          <form onSubmit={handleSubmit(login)} className="flex flex-col gap-4 w-full">
-            <div className="flex flex-col gap-4 w-full">
-              <input
-                className="px-4 py-2 border rounded"
-                placeholder="Enter your email"
-                aria-label="Email"
-                {...register('email', {
-                  required: true,
-                  
-                })}
-              />
-              <input
-                className="px-4 py-2 border rounded"
-                placeholder="•••••••••••"
-                aria-label="Password"
-                type="password"
-                {...register('password')}
-              />
-            </div>
-            <div className="flex justify-between items-center gap-2 w-full">
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="rememberAccount"
-                  className="h-4 w-4 rounded border-gray-300"
-                />
-                <label
-                  htmlFor="rememberAccount"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Remember for 30 days
-                </label>
-              </div>
-              <Link
-                href="/forgot-password"
-                className="text-sm font-medium text-blue-600 hover:text-blue-500"
-              >
-                Forgot Password
-              </Link>
-            </div>
-            <div className="flex flex-col gap-4 w-full">
-              <button className="px-4 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700">
-                Sign in
-              </button>
-              {/* <Button fullWidth state={"Disable"}><BiLogoGoogle size={24} /> Sign in with Google</Button> */}
-            </div>
-          </form>
-          <div className="flex justify-center items-center gap-2 w-full">
-            <p className="text-sm text-gray-500">Don&apos;t have an account?</p>
+        </div>
+        <form onSubmit={onSubmit} className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col gap-4 w-full">
+            <Input
+              disabled={isLoading}
+              id="email"
+              type="email"
+              placeholder="Ingresa tu e-mail"
+              aria-label="Email"
+              error={errors.email?.message}
+              {...register("email", {
+                required: true,
+              })}
+            />
+            <Input
+              disabled={isLoading}
+              id="password"
+              placeholder="•••••••••••"
+              aria-label="Password"
+              type="password"
+              error={errors.password?.message}
+              {...register("password", { required: true })}
+            />
+          </div>
+          <div className="flex justify-end w-full">
             <Link
-              href="/register"
-              className="text-sm font-medium text-blue-600 hover:text-blue-500"
+              href="/recover"
+              className="text-sm font-medium text-purple-600 hover:text-purple-700"
             >
-              Sign up
+              Recuperar cuenta
             </Link>
           </div>
+          <div className="flex flex-col gap-4 w-full">
+            <Button label="Iniciar sesión" isLoading={isLoading}/>
+            {/* <Button fullWidth state={"Disable"}><BiLogoGoogle size={24} /> Sign in with Google</Button> */}
+          </div>
+        </form>
+        <div className="flex justify-center items-center gap-2 w-full">
+          <p className="text-sm text-gray-500">¿No tienes una cuenta?</p>
+          <Link
+            href="/register"
+            className="text-sm font-medium text-purple-600 hover:text-purple-700"
+          >
+            Registrarse
+          </Link>
         </div>
       </div>
       <div

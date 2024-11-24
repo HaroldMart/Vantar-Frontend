@@ -9,16 +9,17 @@ import { LoginCredentials, Tokens, ResetPassword, SingupCredentials } from '@aut
 
 const url: string = API_URL + 'auth';
 
-export async function login(credentials: LoginCredentials): Promise<void> {
+export async function login(credentials: LoginCredentials): Promise<any> {
     try {
         const res = await axios.post<Tokens>(url + '/login', credentials);
-        console.log('response: ', res.data);
         cookies().set('access_token', res.data.access_token);
         cookies().set('refresh_token', res.data.refresh_token);
         redirect('/');
-    } catch (err) {
-        console.error('Login error:', err);
-        throw new Error('Failed to log in. Please check your credentials.');
+    } catch (err: any) {
+        return {
+            message: err.response.data.message,
+            status: err.response.data.statusCode
+        }
     }
 }
 
