@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 
 import { login } from "@auth/lib/auth-actions";
 import { LoginCredentials } from "@auth/lib/interfaces";
-import { Button, Icon, Input, Toaster } from "@shared/_components";
+import { Button, Input, Toaster } from "@shared/_components";
 import { loginSchema } from "@auth/lib/schemas";
 import { useState } from "react";
 

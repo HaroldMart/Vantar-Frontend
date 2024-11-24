@@ -20,10 +20,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@shared/*": ["app/(features)/shared/*"],
-      "@products/*": ["app/(features)/products/*"],
-      "@inventories/*": ["app/(features)/inventories/*"],
-      "@auth/*": ["app/(features)/(auth)/*"]
+      "@shared/*": ["app/shared/*"],
+      "@products/*": ["app/products/*"],
+      "@inventories/*": ["app/inventories/*"],
+      "@auth/*": ["app/(auth)/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/404.js", "app/not-found.tsx"],
