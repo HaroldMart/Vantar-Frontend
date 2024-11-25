@@ -5,12 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import { Button, Input, Toaster } from "@shared/_components";
 import { recoverSchema } from "@auth/lib/schemas";
-import { forgotPassword } from "../../lib/auth-actions";
+import { forgotPassword } from "@auth/lib/auth-actions";
 
 export default function Page() {
+  const router = useRouter();
   const [isLoading, setLoading] = useState<boolean>(false);
   const {
     handleSubmit,
@@ -24,12 +26,13 @@ export default function Page() {
     const res = await forgotPassword(credentials.email);
     setLoading(false);
     if (res.message) toast('E-mail enviado al correo proporcionado.');
+    router.replace('/login');
   });
 
   return (
     <section className="flex h-full items-start bg-white" id="login">
       <Toaster />
-      <div className="flex flex-col justify-center items-center gap-4 flex-1 h-full px-[10%] md:px-[30%] py-82">
+      <div className="flex flex-col justify-center items-center gap-4 flex-1 h-screen px-[10%] md:px-[30%] py-82">
         <div className="flex flex-col justify-center items-center gap-4 p-10 w-full">
           <Image src="/images/logo.png" width={48} height={48} alt="Logo" />
           <div className="flex flex-col justify-center items-center gap-3 w-full text-center">

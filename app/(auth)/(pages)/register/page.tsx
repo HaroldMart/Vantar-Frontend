@@ -77,6 +77,15 @@ export default function Page() {
             error={errors.password?.message}
             {...register("password", { required: true })}
           />
+          {/* <Input
+            disabled={isLoading}
+            id="2password"
+            placeholder="•••••••••••"
+            aria-label="2Password"
+            type="password"
+            error={errors.password?.message}
+            {...register("password", { required: true })}
+          /> */}
           <Button label="Iniciar sesión" isLoading={isLoading} />
         </form>
         <div className="flex flex-col justify-center items-center gap-2 w-full">

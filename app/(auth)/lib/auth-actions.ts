@@ -71,7 +71,9 @@ export async function logout(): Promise<void> {
 
 export async function forgotPassword(email: string) {
     try {
-        const res = await axios.post<{ message: string }>(url + '/forgot', email);
+        const res = await axios.post<{ message: string }>(url + '/forgot', {
+            email: email
+        });
         return res.data;
     } catch (err: any) {
         return {
@@ -95,7 +97,7 @@ export async function activateAccount(token: string) {
     }
 }
 
-export async function resetPassword(credentials: ResetPassword): Promise<string> {
+export async function resetPassword(credentials: ResetPassword) {
     const { password, token } = credentials;
 
     try {
@@ -104,9 +106,14 @@ export async function resetPassword(credentials: ResetPassword): Promise<string>
         }, {
             params: { 'token': token }
         });
-        return res.data.message;
-    } catch (err) {
-        console.error('Error:', err);
-        throw new Error('Failed. Please check your credentials.');
+        return {
+            message: res.data.message,
+            success: true
+        };
+    } catch (err: any) {
+        return {
+            message: 'Token invalido',
+            success: false
+        }
     }
 }
