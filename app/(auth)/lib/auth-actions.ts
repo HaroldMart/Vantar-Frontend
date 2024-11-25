@@ -81,15 +81,17 @@ export async function forgotPassword(email: string) {
     }
 }
 
-export async function activateAccount(token: string): Promise<string> {
+export async function activateAccount(token: string) {
     try {
         const res = await axios.get<{ message: string }>(url + '/activate', {
             params: { 'token': token }
         });
-        return res.data.message;
-    } catch (err) {
-        console.error('Error:', err);
-        throw new Error('Failed. Please check your credentials.');
+        return { success: true };
+    } catch (err: any) {
+        return {
+            message: 'Token invalido',
+            status: err.response.data.statusCode
+        }
     }
 }
 
