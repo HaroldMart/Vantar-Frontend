@@ -21,8 +21,8 @@
     "paths": {
       "@/*": ["./*"],
       "@shared/*": ["app/shared/*"],
-      "@products/*": ["app/products/*"],
-      "@inventories/*": ["app/inventories/*"],
+      "@products/*": ["app/(features)/products/*"],
+      "@inventories/*": ["app/(features)/inventories/*"],
       "@auth/*": ["app/(auth)/*"]
     }
   },

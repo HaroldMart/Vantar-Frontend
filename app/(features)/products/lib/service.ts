@@ -1,5 +1,5 @@
-import { API } from "../../shared/constants";
-import { IGenericService } from "../../shared/interfaces";
+import { API } from "../../../shared/constants";
+import { IGenericService } from "../../../shared/interfaces";
 import { Product } from "./core";
 
 // THIS IS THE ROUTE AND COMMAND FOR RUN THE FAKE DATABASE: "PS P:\Coding\vantar-frontend\app\(features)\shared> pnpm json-server db.json"
