@@ -5,15 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 import { Button, Input, Toaster } from "@shared/_components";
 import { recoverSchema } from "@auth/lib/schemas";
 import { forgotPassword } from "@auth/lib/auth-actions";
 
 export default function Page() {
-  const router = useRouter();
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
     handleSubmit,
     register,
@@ -22,11 +20,10 @@ export default function Page() {
     resolver: zodResolver(recoverSchema),
   });
   const onSubmit = handleSubmit(async (credentials) => {
-    setLoading(true);
+    setIsLoading(true);
     const res = await forgotPassword(credentials.email);
-    setLoading(false);
-    if (res.message) toast('E-mail enviado al correo proporcionado.');
-    router.replace('/login');
+    setIsLoading(false);
+    toast(res);
   });
 
   return (

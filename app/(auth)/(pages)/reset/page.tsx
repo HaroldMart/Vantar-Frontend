@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import { Button, Input, Toaster } from "@shared/_components";
 import { resetPassword } from "@auth/lib/auth-actions";
@@ -13,9 +13,8 @@ import { ResetPassword } from "@auth/lib/interfaces";
 import { resetPasswordSchema } from "@auth/lib/schemas";
 
 export default function Page() {
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const params = useSearchParams();
-  const router = useRouter();
   const token: string = params.get('token') ?? '';
 
   const {
@@ -35,18 +34,9 @@ export default function Page() {
 
     if (password != confirmPassword) toast('Las contraseñas no coinciden');
 
-    setLoading(true);
+    setIsLoading(true);
     const res = await resetPassword({ password, token });
-
-    if (res.success) {
-        setLoading(false);
-        router.replace('/login');
-    };
-    
-    if (!res.success) {
-        setLoading(false);
-        toast(res.message);
-    }
+    toast(res);
   });
 
   return (

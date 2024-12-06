@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Metadata } from "next";
-import { useRouter } from "next/navigation";
 
 import { login } from "@auth/lib/auth-actions";
 import { LoginCredentials } from "@auth/lib/interfaces";
@@ -18,8 +17,7 @@ import { Banner } from "@auth/_components";
 export const metadta: Metadata = { title: 'Inciar sesion' };
 
 export default function Page() {
-  const router = useRouter();
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
     handleSubmit,
     register,
@@ -28,11 +26,10 @@ export default function Page() {
     resolver: zodResolver(loginSchema),
   });
   const onSubmit = handleSubmit(async (credentials) => {
-    setLoading(true);
+    setIsLoading(true);
     const res = await login(credentials);
-    if (res.success) router.push('/');
-    setLoading(false);
-    if (res.message) toast(`${res.message[0]}`);
+    setIsLoading(false);
+    toast(res);
   });
 
   return (

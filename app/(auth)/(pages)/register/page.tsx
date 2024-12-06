@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { singUp } from "@auth/lib/auth-actions";
 import { SingupCredentials } from "@auth/lib/interfaces";
@@ -15,8 +14,7 @@ import { singUpSchema } from "@auth/lib/schemas";
 import { Banner } from "@auth/_components";
 
 export default function Page() {
-  const router = useRouter();
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
     handleSubmit,
     register,
@@ -25,11 +23,10 @@ export default function Page() {
     resolver: zodResolver(singUpSchema),
   });
   const onSubmit = handleSubmit(async (credentials) => {
-    setLoading(true);
+    setIsLoading(true);
     const res = await singUp(credentials);
-    if (res.success) router.push('/');
-    setLoading(false);
-    if (res.message) toast(`${res.message[0]}`);
+    setIsLoading(false);
+    toast(res);
   });
 
   return (
