@@ -22,7 +22,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className="flex">
-                {/* <AuthContextProvider>
+                <AuthContextProvider>
                     <div className="flex bg-gray-100 w-full">
                         <div
                             role="main"
@@ -36,10 +36,10 @@ export default function RootLayout({
                             </div>
                         </div>
                     </div>
-                </AuthContextProvider> */}
-                <AuthContextProvider>
-                    {children}
                 </AuthContextProvider>
+                {/* <AuthContextProvider>
+                    {children}
+                </AuthContextProvider> */}
             </body>
         </html>
     );

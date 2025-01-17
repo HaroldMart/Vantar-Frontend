@@ -1,6 +1,8 @@
 import { Inventory } from "@/app/(features)/inventory/lib/model";
-import { API } from "@/app/(features)/shared/api/config";
 import { GenericService } from "@/app/(features)/shared/generic/service";
+// import { API } from "@/app/(features)/shared/api/config";
+
+const API = "http://localhost:2020/";
 
 export interface IInventoryService {
     getAllInventories(businessId: string): Promise<Inventory[]>;
